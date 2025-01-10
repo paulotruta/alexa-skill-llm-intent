@@ -51,7 +51,7 @@ class LLMQuestionProxy:
         try:
             response = requests.post(url, headers=headers, json=payload)
             response.raise_for_status()
-            return response.json()
+            return response.json()["choices"][0]["text"]
         except requests.exceptions.RequestException as e:
             logger.error(f"HTTP Request failed: {e}")
             # Return an error message, but only say part of the error message
