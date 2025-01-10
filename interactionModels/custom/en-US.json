@@ -1,7 +1,12 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "jee pee tee",
+      "invocationName": "artificial intelligence",
+      "modelConfiguration": {
+        "fallbackIntentSensitivity": {
+          "level": "LOW"
+        }
+      },
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -27,11 +32,19 @@
             }
           ],
           "samples": [
+            "yes",
+            "question",
+            "maybe {searchQuery}",
+            "no {searchQuery}",
+            "yes {searchQuery}",
+            "could {searchQuery}",
+            "tell me about {searchQuery}",
             "if {searchQuery}",
             "for {searchQuery}",
             "when {searchQuery}",
             "who {searchQuery}",
             "how {searchQuery}",
+            "what {searchQuery}",
             "the question {searchQuery}",
             "about {searchQuery}",
             "answer a question",
@@ -65,8 +78,8 @@
             {
               "name": "searchQuery",
               "type": "AMAZON.SearchQuery",
-              "elicitationRequired": true,
               "confirmationRequired": false,
+              "elicitationRequired": true,
               "prompts": {
                 "elicitation": "Elicit.Slot.29691672240.1575270597350"
               }
@@ -82,7 +95,7 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "What\u0027s on your mind?"
+            "value": "What's on your mind?"
           },
           {
             "type": "PlainText",
@@ -99,7 +112,7 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "What\u0027s up?"
+            "value": "What's up?"
           },
           {
             "type": "PlainText",
@@ -115,11 +128,10 @@
           },
           {
             "type": "PlainText",
-            "value": "Sure. What\u0027s on your mind?"
+            "value": "Sure. What's on your mind?"
           }
         ]
       }
     ]
-  },
-  "version": "19"
+  }
 }
