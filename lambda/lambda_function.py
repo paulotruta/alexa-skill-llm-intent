@@ -10,16 +10,17 @@
 # implementing Alexa features!
 
 import logging
+
 import requests
-
-from utils import load_config
-
 from ask_sdk_core import utils as ask_utils
-from ask_sdk_core.dispatch_components import AbstractRequestHandler
-from ask_sdk_core.dispatch_components import AbstractExceptionHandler
+from ask_sdk_core.dispatch_components import (
+    AbstractExceptionHandler,
+    AbstractRequestHandler,
+)
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model import Response
+from utils import load_config
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -56,16 +57,13 @@ class LLMQuestionProxy:
             logger.error(f"HTTP Request failed: {e}")
             # Return an error message, but only say part of the error message
             return {
-                "message": f'Sorry, I encontered an error processing your \
-                    request: {str(e)[:100]}'
+                "message": f"Sorry, I encontered an error processing your \
+                    request: {str(e)[:100]}"
             }
 
     def webhook_request(self, question: str) -> dict:
         """Send a request to the LLM API and return the response."""
-        payload = {
-            "message": question,
-            "token": self.LLM_KEY
-        }
+        payload = {"message": question, "token": self.LLM_KEY}
 
         try:
             # Send a POST request
@@ -80,8 +78,8 @@ class LLMQuestionProxy:
             logger.error(f"HTTP Request failed: {e}")
             # Return an error message, but only say part of the error message
             return {
-                "message": f'Sorry, I encountered an error processing your \
-                    request: {str(e)[:100]}'
+                "message": f"Sorry, I encountered an error processing your \
+                    request: {str(e)[:100]}"
             }
 
     def ask(self, question: str) -> dict:
@@ -106,10 +104,10 @@ class BaseRequestHandler(AbstractRequestHandler):
 
 class LaunchRequestHandler(BaseRequestHandler):
     """
-        Handler for Skill Launch.
-        This is the first handler that is called when the skill is invoked
-        directly. Will only be invoked if the intent does not have
-        a LaunchRequest handling in its config.
+    Handler for Skill Launch.
+    This is the first handler that is called when the skill is invoked
+    directly. Will only be invoked if the intent does not have
+    a LaunchRequest handling in its config.
     """
 
     def can_handle(self, handler_input: HandlerInput) -> bool:
@@ -128,8 +126,8 @@ class LaunchRequestHandler(BaseRequestHandler):
 
 class QuestionIntentHandler(BaseRequestHandler):
     """
-        Main Handler for turn chat question/answer flow. Receive a question
-        and provides an answer.
+    Main Handler for turn chat question/answer flow. Receive a question
+    and provides an answer.
     """
 
     def can_handle(self, handler_input: HandlerInput) -> bool:
@@ -214,12 +212,7 @@ class FallbackIntentHandler(BaseRequestHandler):
         speech = voice_prompt
         reprompt = "Anything else I can help you with?"
 
-        return handler_input.response_builder \
-            .speak(
-                speech
-            ).ask(
-                reprompt
-            ).response
+        return handler_input.response_builder.speak(speech).ask(reprompt).response
 
 
 class SessionEndedRequestHandler(BaseRequestHandler):
@@ -265,28 +258,17 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
     it in the skill builder below.
     """
 
-    def can_handle(
-        self,
-        handler_input: HandlerInput,
-        exception: Exception
-    ) -> bool:
+    def can_handle(self, handler_input: HandlerInput, exception: Exception) -> bool:
         return True
 
-    def handle(
-        self,
-        handler_input: HandlerInput,
-        exception: Exception
-    ) -> Response:
+    def handle(self, handler_input: HandlerInput, exception: Exception) -> Response:
         logger.error(exception, exc_info=True)
 
         speak_output = "{} {}".format(
             "Sorry, I had trouble doing what you asked.", "Please try again."
         )
 
-        return (
-            handler_input.response_builder.speak(speak_output)
-            .response
-        )
+        return handler_input.response_builder.speak(speak_output).response
 
 
 # The SkillBuilder object acts as the entry point for your skill

@@ -1,0 +1,2 @@
+pre-commit==4.0.1
+types-requests==2.32.0.20241016
