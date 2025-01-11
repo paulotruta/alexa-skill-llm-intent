@@ -61,9 +61,16 @@ class LLMQuestionProxy:
                     request: {str(e)[:100]}"
             }
 
-    def webhook_request(self, question: str) -> dict:
+    def webhook_request(self, question: str, session_key: str = None) -> dict:
         """Send a request to the LLM API and return the response."""
-        payload = {"message": question, "token": self.LLM_KEY}
+        
+        payload = {
+            "message": question, 
+            "token": self.LLM_KEY
+        }
+        
+        if session_key:
+            payload["session_key"] = session_key
 
         try:
             # Send a POST request
@@ -82,12 +89,12 @@ class LLMQuestionProxy:
                     request: {str(e)[:100]}"
             }
 
-    def ask(self, question: str) -> dict:
+    def ask(self, question: str, who: str = None) -> dict:
         """Ask a question and get a response."""
         if self.LLM_MODEL != "webhook":
             return self.api_request(question)
         else:
-            return self.webhook_request(question)
+            return self.webhook_request(question, who)
 
 
 class BaseRequestHandler(AbstractRequestHandler):
@@ -137,11 +144,17 @@ class QuestionIntentHandler(BaseRequestHandler):
 
         # Get the question from the user
         slots = handler_input.request_envelope.request.intent.slots
+        
         voice_prompt = slots["searchQuery"].value
+        
+        logger.info(handler_input.request_envelope)
         logger.info("User requests: " + voice_prompt)
+        
+        user_id = handler_input.request_envelope.session.user.user_id
+        logger.info("User id: " + user_id)
 
         # Ask the LLM for a response
-        response = self.question.ask(voice_prompt)
+        response = self.question.ask(voice_prompt, user_id)
         logger.info(response)
         logger.info("LLM Response: " + response["message"])
 
