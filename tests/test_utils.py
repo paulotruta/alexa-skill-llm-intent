@@ -28,3 +28,27 @@ class TestCannedResponse(TestCase):
     def test_invalid_locale(self):
         canned_response = CannedResponse("invalid_locale")
         self.assertEqual(canned_response.locale, "en-US")
+
+    def test_get_help_phrase(self):
+        canned_response = CannedResponse("en-US")
+        assert isinstance(canned_response.get_help_phrase(), str)
+
+    def test_get_no_message_phrase(self):
+        canned_response = CannedResponse("en-US")
+        assert isinstance(canned_response.get_no_message_phrase(), str)
+
+    def test_get_goodbye_phrase(self):
+        canned_response = CannedResponse("en-US")
+        assert isinstance(canned_response.get_goodbye_phrase(), str)
+
+    def test_get_reprompt_phrase(self):
+        canned_response = CannedResponse("en-US")
+        assert isinstance(canned_response.get_fallback_handler_phrase(), str)
+
+    def test_get_launch_handler_phrase(self):
+        canned_response = CannedResponse("en-US")
+        assert isinstance(canned_response.get_launch_handler_phrase(), str)
+
+    def test_get_fallback_handler_phrasee(self):
+        canned_response = CannedResponse("en-US")
+        assert isinstance(canned_response.get_fallback_handler_phrase(), str)
