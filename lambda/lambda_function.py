@@ -30,8 +30,7 @@ config = load_config()
 
 
 class LLMQuestionProxy:
-    """Handler to communicate with an LLM via API or
-    Webhook.
+    """Handler to communicate with an LLM via API or Webhook.
     Ask a question and it shall provide an answer."""
 
     LLM_URL = config["llm_url"]
@@ -169,8 +168,7 @@ class LaunchRequestHandler(BaseRequestHandler):
 
 class QuestionIntentHandler(BaseRequestHandler):
     """
-    Main Handler for turn chat question/answer flow. Receive a question
-    and provides an answer.
+    Main Handler for turn chat question/answer flow. Receive a question and provides an answer.
     """
 
     def can_handle(self, handler_input: HandlerInput) -> bool:
