@@ -21,7 +21,7 @@ from ask_sdk_core.dispatch_components import (
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model import Response
-from utils import CannedResponse, load_config
+from llm_intent.utils import CannedResponse, load_config
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
