@@ -126,3 +126,5 @@ dmypy.json
 .pyre/
 
 config.json
+
+/.idea/
