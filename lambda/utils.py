@@ -14,7 +14,6 @@ def load_config() -> dict:
 
 
 class CannedResponse:
-
     RESPONSES = {
         "en-US": {
             "helpPhrases": [
@@ -89,4 +88,4 @@ class CannedResponse:
         return self.get_random_data_item(key)
 
     def get_response_list(self, key: str) -> list:
-        return self.data.get(key, None)
+        return self.data.get(key, [])
