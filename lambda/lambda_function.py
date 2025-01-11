@@ -80,7 +80,9 @@ class LLMQuestionProxy:
 
             logger.info(response.json())
 
-            return response.json()["choices"][0]["text"]
+            return {
+                "message": response.json()["choices"][0]["message"]["content"]
+            }
         except requests.exceptions.RequestException as e:
             logger.error(f"HTTP Request failed: {e}")
             # Return an error message, but only say part of the error message
