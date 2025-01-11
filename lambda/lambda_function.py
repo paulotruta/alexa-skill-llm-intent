@@ -9,8 +9,8 @@
 # Please visit https://alexa.design/cookbook for additional examples on
 # implementing Alexa features!
 
-import logging
 import json
+import logging
 
 import requests
 from ask_sdk_core import utils as ask_utils
@@ -36,29 +36,29 @@ class LLMQuestionProxy:
     LLM_URL = config["llm_url"]
     LLM_KEY = config["llm_key"]
     LLM_MODEL = config["llm_model"]
-    
+
     LLM_SYSTEM_PROMPT = """
-        You are a helpful AI assistant that respoonds by voice. 
-        Your answers should be simple and quick. 
-        Don't speak back for more than 5 seconds. 
-        If you need to say more things, say that you're happy to continue and wait for the user to ask you to continue. 
-        Remember, your objective is to reply in as little time as possible, so keep that in mind and don't think a lot about the answer. 
-        You were created by jpt.land as part of a personal exploration project. Paulo Truta worked to make you easy to use! 
+        You are a helpful AI assistant that respoonds by voice.
+        Your answers should be simple and quick.
+        Don't speak back for more than 5 seconds.
+        If you need to say more things, say that you're happy to continue and wait for the user to ask you to continue.
+        Remember, your objective is to reply in as little time as possible, so keep that in mind and don't think a lot about the answer.
+        You were created by jpt.land as part of a personal exploration project. Paulo Truta worked to make you easy to use!
         If the user asks about you, tell him ou are the Alexa Artificial Intelligence Skill.
         You're an helpful and funny artificial intelligente powered assistant ready to answer any questions a person may have, right on Amazon Alexa.
-    """    
+    """
 
     def api_request(self, question: str, context: dict = {}) -> dict:
         """Send a request to the LLM API and return the response."""
         logger.info("API Request - " + self.LLM_URL + " - " + self.LLM_MODEL)
 
         url = self.LLM_URL
-        
+
         headers = {
             "Authorization": f"Bearer {self.LLM_KEY}",
             "Content-Type": "application/json",
             "HTTP_Referer": "wordpress.jpt.land/ai",
-            "X-Title": "jpt.land AI"
+            "X-Title": "jpt.land AI",
         }
 
         payload = {
@@ -68,41 +68,32 @@ class LLMQuestionProxy:
 
         try:
             response = requests.post(
-              url=self.LLM_URL,
-              headers=headers,
-              data=json.dumps({
-                "model": self.LLM_MODEL,
-                "messages": [
-                  {
-                    "role": "system",
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": self.LLM_SYSTEM_PROMPT
-                      }
-                    ]
-                  },
-                  {
-                    "role": "user",
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": question
-                      }
-                    ]
-                  }
-                ]
-                
-              })
+                url=self.LLM_URL,
+                headers=headers,
+                data=json.dumps(
+                    {
+                        "model": self.LLM_MODEL,
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": [
+                                    {"type": "text", "text": self.LLM_SYSTEM_PROMPT}
+                                ],
+                            },
+                            {
+                                "role": "user",
+                                "content": [{"type": "text", "text": question}],
+                            },
+                        ],
+                    }
+                ),
             )
-            
+
             response.raise_for_status()
 
             logger.info(response.json())
 
-            return {
-                "message": response.json()["choices"][0]["message"]["content"]
-            }
+            return {"message": response.json()["choices"][0]["message"]["content"]}
         except requests.exceptions.RequestException as e:
             logger.error(f"HTTP Request failed: {e}")
             # Return an error message, but only say part of the error message
@@ -123,10 +114,7 @@ class LLMQuestionProxy:
 
         try:
             # Send a POST request
-            response = requests.post(
-                self.LLM_URL,
-                json=payload
-            )
+            response = requests.post(self.LLM_URL, json=payload)
 
             # Raise an exception if the request was not successful
             response.raise_for_status()
@@ -211,16 +199,13 @@ class QuestionIntentHandler(BaseRequestHandler):
             "api_access_token": handler_input.request_envelope.context.system.api_access_token,
             "api_endpoint": handler_input.request_envelope.context.system.api_endpoint,
             "locale": handler_input.request_envelope.request.locale,
-            "intent": handler_input.request_envelope.request.intent.name
+            "intent": handler_input.request_envelope.request.intent.name,
         }
 
         logger.info(context_data)
 
         # Ask the LLM for a response
-        response = self.question.ask(
-            voice_prompt,
-            context_data
-        )
+        response = self.question.ask(voice_prompt, context_data)
 
         logger.info(response)
         logger.info("LLM Response: " + response["message"])
