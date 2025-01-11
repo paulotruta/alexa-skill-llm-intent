@@ -24,4 +24,4 @@ jobs:
     - name: Install dependencies
       run: pip install -r lambda/requirements-dev.txt
     - name: Run tests
-      run: pytest tests
+      run: pytest
