@@ -9,6 +9,7 @@
 # Please visit https://alexa.design/cookbook for additional examples on
 # implementing Alexa features!
 
+import json
 import logging
 
 import requests  # noqa: E402
@@ -29,7 +30,8 @@ config = load_config()
 
 
 class LLMQuestionProxy:
-    """Handler to communicate with an LLM via API or Webhook.
+    """Handler to communicate with an LLM via API or
+    Webhook.
     Ask a question and it shall provide an answer."""
 
     LLM_URL = config["llm_url"]
@@ -51,18 +53,11 @@ class LLMQuestionProxy:
         """Send a request to the LLM API and return the response."""
         logger.info("API Request - " + self.LLM_URL + " - " + self.LLM_MODEL)
 
-        url = self.LLM_URL
-
         headers = {
             "Authorization": f"Bearer {self.LLM_KEY}",
             "Content-Type": "application/json",
             "HTTP_Referer": "wordpress.jpt.land/ai",
             "X-Title": "jpt.land AI",
-        }
-
-        payload = {
-            "model": self.LLM_MODEL,
-            "question": question,
         }
 
         try:
@@ -182,7 +177,6 @@ class QuestionIntentHandler(BaseRequestHandler):
         return ask_utils.is_intent_name("QuestionIntent")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
-
         # Get the question from the user
         slots = handler_input.request_envelope.request.intent.slots
 
