@@ -10,6 +10,7 @@
 # implementing Alexa features!
 
 import logging
+import json
 
 import requests
 from ask_sdk_core import utils as ask_utils
@@ -36,12 +37,17 @@ class LLMQuestionProxy:
     LLM_KEY = config["llm_key"]
     LLM_MODEL = config["llm_model"]
 
-    def api_request(self, question: str) -> dict:
+    def api_request(self, question: str, context: dict = {}) -> dict:
         """Send a request to the LLM API and return the response."""
+        logger.info("API Request - " + self.LLM_URL + " - " + self.LLM_MODEL)
+
         url = self.LLM_URL
+        
         headers = {
             "Authorization": f"Bearer {self.LLM_KEY}",
             "Content-Type": "application/json",
+            "HTTP_Referer": "wordpress.jpt.land/ai",
+            "X-Title": "jpt.land AI"
         }
 
         payload = {
@@ -50,31 +56,55 @@ class LLMQuestionProxy:
         }
 
         try:
-            response = requests.post(url, headers=headers, json=payload)
+            response = requests.post(
+              url=self.LLM_URL,
+              headers=headers,
+              data=json.dumps({
+                "model": self.LLM_MODEL, # Optional
+                "messages": [
+                  {
+                    "role": "user",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": question
+                      }
+                    ]
+                  }
+                ]
+                
+              })
+            )
+            
             response.raise_for_status()
+
+            logger.info(response.json())
+
             return response.json()["choices"][0]["text"]
         except requests.exceptions.RequestException as e:
             logger.error(f"HTTP Request failed: {e}")
             # Return an error message, but only say part of the error message
             return {
-                "message": f"Sorry, I encontered an error processing your \
+                "message": f"Sorry, I encontered an error thinking about your \
                     request: {str(e)[:100]}"
             }
 
-    def webhook_request(self, question: str, session_key: str = None) -> dict:
+    def webhook_request(self, question: str, context: dict) -> dict:
         """Send a request to the LLM API and return the response."""
-        
-        payload = {
-            "message": question, 
-            "token": self.LLM_KEY
+
+        local_payload = {
+            "token": self.LLM_KEY,
+            "question": question,
         }
-        
-        if session_key:
-            payload["session_key"] = session_key
+
+        payload = {**context, **local_payload}
 
         try:
             # Send a POST request
-            response = requests.post(self.LLM_URL, json=payload)
+            response = requests.post(
+                self.LLM_URL,
+                json=payload
+            )
 
             # Raise an exception if the request was not successful
             response.raise_for_status()
@@ -89,12 +119,14 @@ class LLMQuestionProxy:
                     request: {str(e)[:100]}"
             }
 
-    def ask(self, question: str, who: str = None) -> dict:
+    def ask(self, question: str, context: dict = {}) -> dict:
         """Ask a question and get a response."""
         if self.LLM_MODEL != "webhook":
+            logger.info("Using API request")
             return self.api_request(question)
         else:
-            return self.webhook_request(question, who)
+            logger.info("Using Webhook request")
+            return self.webhook_request(question, context)
 
 
 class BaseRequestHandler(AbstractRequestHandler):
@@ -144,17 +176,30 @@ class QuestionIntentHandler(BaseRequestHandler):
 
         # Get the question from the user
         slots = handler_input.request_envelope.request.intent.slots
-        
+
         voice_prompt = slots["searchQuery"].value
-        
+
         logger.info(handler_input.request_envelope)
         logger.info("User requests: " + voice_prompt)
-        
-        user_id = handler_input.request_envelope.session.user.user_id
-        logger.info("User id: " + user_id)
+
+        context_data = {
+            "user_id": handler_input.request_envelope.session.user.user_id,
+            "device_id": handler_input.request_envelope.context.system.device.device_id,
+            "application_id": handler_input.request_envelope.context.system.application.application_id,
+            "api_access_token": handler_input.request_envelope.context.system.api_access_token,
+            "api_endpoint": handler_input.request_envelope.context.system.api_endpoint,
+            "locale": handler_input.request_envelope.request.locale,
+            "intent": handler_input.request_envelope.request.intent.name
+        }
+
+        logger.info(context_data)
 
         # Ask the LLM for a response
-        response = self.question.ask(voice_prompt, user_id)
+        response = self.question.ask(
+            voice_prompt,
+            context_data
+        )
+
         logger.info(response)
         logger.info("LLM Response: " + response["message"])
 
