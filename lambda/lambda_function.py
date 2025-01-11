@@ -12,7 +12,7 @@
 import json
 import logging
 
-import requests
+import requests  # noqa: E402
 from ask_sdk_core import utils as ask_utils
 from ask_sdk_core.dispatch_components import (
     AbstractExceptionHandler,
