@@ -21,12 +21,13 @@ from ask_sdk_core.dispatch_components import (
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model import Response
-from utils import load_config
+from utils import CannedResponse, load_config
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 config = load_config()
+canned_response = CannedResponse("en-US")
 
 
 class LLMQuestionProxy:
@@ -157,7 +158,7 @@ class LaunchRequestHandler(BaseRequestHandler):
 
     def handle(self, handler_input: HandlerInput) -> Response:
         # TODO: Implement something a bit more dynamic (randomized from a list)
-        speak_output = "Sure, what is the question?"
+        speak_output = canned_response.get_launch_handler_phrase()
 
         return (
             handler_input.response_builder.speak(speak_output)
@@ -204,10 +205,10 @@ class QuestionIntentHandler(BaseRequestHandler):
         # Speak the response or fallback message
         # TODO: Implement something a bit more dynamic (randomized from a list)
 
-        speak_output = response.get("message", "I'm not sure what to say.")
+        speak_output = response.get("message", canned_response.get_no_message_phrase())
         return (
             handler_input.response_builder.speak(speak_output)
-            .ask("Can I help you any further?")
+            .ask(canned_response.get_reprompt_phrase())
             .response
         )
 
@@ -219,15 +220,11 @@ class HelpIntentHandler(BaseRequestHandler):
         return ask_utils.is_intent_name("AMAZON.HelpIntent")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
-        speak_output = "{} {}".format(
-            "I'm a friendly and powerful AI assistant tool \
-            an I can answer any questions you have in a pertinent way!",
-            "How can I help?",
-        )
+        speak_output = canned_response.get_help_phrase()
 
         return (
             handler_input.response_builder.speak(speak_output)
-            .ask(speak_output)
+            .ask(canned_response.get_reprompt_phrase())
             .response
         )
 
@@ -242,7 +239,7 @@ class CancelOrStopIntentHandler(BaseRequestHandler):
 
     def handle(self, handler_input: HandlerInput) -> Response:
         # TODO: Implement something a bit more dynamic (randomized from a list)
-        speak_output = "Goodbye!"
+        speak_output = canned_response.get_goodbye_phrase()
         return handler_input.response_builder.speak(speak_output).response
 
 
@@ -259,14 +256,11 @@ class FallbackIntentHandler(BaseRequestHandler):
         # (utterance that triggered this).
         # Due to the way the fallbackintenthandler is structured,
         # this does not seem possible atm.
-        voice_prompt = " \
-            I'm terribly sorry, I didn't understand that. \
-            Could you please repeat it? \
-        "
+        voice_prompt = canned_response.get_fallback_handler_phrase()
         logger.info("Response:  " + voice_prompt)
 
         speech = voice_prompt
-        reprompt = "Anything else I can help you with?"
+        reprompt = canned_response.get_reprompt_phrase()
 
         return handler_input.response_builder.speak(speech).ask(reprompt).response
 
@@ -301,7 +295,7 @@ class IntentReflectorHandler(BaseRequestHandler):
 
         return (
             handler_input.response_builder.speak(speak_output)
-            .ask("Can I help you any further?")
+            .ask(canned_response.get_reprompt_phrase())
             .response
         )
 
@@ -320,9 +314,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
     def handle(self, handler_input: HandlerInput, exception: Exception) -> Response:
         logger.error(exception, exc_info=True)
 
-        speak_output = "{} {}".format(
-            "Sorry, I had trouble doing what you asked.", "Please try again."
-        )
+        speak_output = canned_response.get_fallback_handler_phrase()
 
         return handler_input.response_builder.speak(speak_output).response
 
