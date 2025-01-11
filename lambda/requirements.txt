@@ -1,2 +1,2 @@
-ask-sdk-core==1.17.1
-revChatGPT==0.0.33.5
+urllib3==1.26.15
+ask-sdk-core==1.19.0
