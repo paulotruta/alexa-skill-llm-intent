@@ -1,4 +1,4 @@
-name: pre-commit
+name: ci
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v3
+    - uses: actions/setup-python@v5
       with:
         python-version-file: llm_intent/.python-version
     - uses: pre-commit/action@v3.0.1
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v3
+    - uses: actions/setup-python@v5
       with:
         python-version-file: llm_intent/.python-version
     - name: Install dependencies
