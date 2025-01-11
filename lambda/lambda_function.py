@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 config = load_config()
-canned_response = CannedResponse
+canned_response = CannedResponse()
 
 
 class LLMQuestionProxy:
