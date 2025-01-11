@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import mock_open, patch
 
-from llm_intent.utils import CONFIG_FILE, load_config
+from llm_intent.utils import CONFIG_FILE, CannedResponse, load_config
 
 
 class TestLoadConfig(TestCase):
@@ -22,3 +22,9 @@ class TestLoadConfig(TestCase):
             load_config()
         self.assertEqual(str(context.exception), "Config file does not exist")
         mock_exists.assert_called_once_with(CONFIG_FILE)
+
+
+class TestCannedResponse(TestCase):
+    def test_invalid_locale(self):
+        canned_response = CannedResponse("invalid_locale")
+        self.assertEqual(canned_response.locale, "en-US")
