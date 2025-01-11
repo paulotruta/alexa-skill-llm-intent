@@ -6,7 +6,7 @@ BUILD_DIR=build
 
 release: clean
 	mkdir $(BUILD_DIR)
-	zip -r $(BUILD_DIR)/alexa-skill-llm-intent-release.zip llm_intent -x lambda/\config.example.json -x lambda/\.venv/\*
+	zip -r $(BUILD_DIR)/alexa-skill-llm-intent-release.zip llm_intent -x llm_intent/\config.example.json -x llm_intent/\.venv/\*
 
 
 clean:

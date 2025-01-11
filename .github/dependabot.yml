@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: "pip"
-    directory: "/lambda/"
+    directory: "/llm_intent/"
     schedule:
       interval: daily
   - package-ecosystem: "github-actions"
