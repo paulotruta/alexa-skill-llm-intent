@@ -53,18 +53,11 @@ class LLMQuestionProxy:
         """Send a request to the LLM API and return the response."""
         logger.info("API Request - " + self.LLM_URL + " - " + self.LLM_MODEL)
 
-        url = self.LLM_URL
-
         headers = {
             "Authorization": f"Bearer {self.LLM_KEY}",
             "Content-Type": "application/json",
             "HTTP_Referer": "wordpress.jpt.land/ai",
             "X-Title": "jpt.land AI",
-        }
-
-        payload = {
-            "model": self.LLM_MODEL,
-            "question": question,
         }
 
         try:
@@ -176,15 +169,13 @@ class LaunchRequestHandler(BaseRequestHandler):
 
 class QuestionIntentHandler(BaseRequestHandler):
     """
-    Main Handler for turn chat question/answer flow. Receive a question
-    and provides an answer.
+    Main Handler for turn chat question/answer flow. Receive a question and provides an answer.
     """
 
     def can_handle(self, handler_input: HandlerInput) -> bool:
         return ask_utils.is_intent_name("QuestionIntent")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
-
         # Get the question from the user
         slots = handler_input.request_envelope.request.intent.slots
 

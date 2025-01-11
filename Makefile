@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := release
-
+.ONESHELL:
 
 BUILD_DIR=build
 
@@ -11,3 +11,10 @@ release: clean
 
 clean:
 	rm -rf $(BUILD_DIR)
+
+
+dev: clean
+	cd lambda
+	python -m venv .venv
+	. .venv/bin/activate
+	pip install -r requirements.txt
