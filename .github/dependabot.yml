@@ -3,4 +3,8 @@ updates:
   - package-ecosystem: "pip"
     directory: "/lambda/"
     schedule:
-      interval: "daily"
+      interval: daily
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: daily
