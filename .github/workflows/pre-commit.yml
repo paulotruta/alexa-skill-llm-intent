@@ -10,5 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v3
+      with:
+        python-version-file: lambda/.python-version
     - uses: pre-commit/action@v3.0.1
