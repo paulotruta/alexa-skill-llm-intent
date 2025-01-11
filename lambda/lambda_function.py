@@ -4,7 +4,6 @@
 # Please visit https://alexa.design/cookbook for additional examples on
 # implementing Alexa features!
 
-import json
 import logging
 
 from ask_sdk_core import utils as ask_utils
