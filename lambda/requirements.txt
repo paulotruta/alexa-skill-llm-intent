@@ -1,2 +1,2 @@
-ask-sdk-core==1.17.1
+ask-sdk-core==1.19.0
 revChatGPT==0.0.33.5
