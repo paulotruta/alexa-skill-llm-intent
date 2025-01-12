@@ -60,8 +60,11 @@ class CannedResponse:
     }
 
     def __init__(self, locale: str):
+        if locale not in self.RESPONSES:
+            locale = "en-US"
+
         self.locale = locale
-        self.data = self.RESPONSES.get(locale, self.RESPONSES["en-US"])
+        self.data = self.RESPONSES[locale]
 
     def get_random_data_item(self, key: str) -> str:
         return random.choice(self.data[key])
