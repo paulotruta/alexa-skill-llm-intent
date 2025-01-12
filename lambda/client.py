@@ -24,7 +24,7 @@ class Client:
 
         response = requests.post(
             url=self.url,
-            headers=self._headers(),
+            headers=self._api_headers(),
             json=payload,
         )
 
