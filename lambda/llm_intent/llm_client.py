@@ -1,7 +1,7 @@
 import requests
 
 
-class Client:
+class LLMClient:
     def __init__(self, url: str, api_key: str, model: str):
         self.url = url
         self.api_key = api_key
@@ -44,7 +44,7 @@ class Client:
 
         return response.json()
 
-    def _headers(self) -> dict:
+    def _api_headers(self) -> dict:
         return {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",

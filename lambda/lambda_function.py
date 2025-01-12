@@ -20,8 +20,8 @@ from ask_sdk_core.dispatch_components import (
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model import Response
+from llm_intent.llm_client import LLMClient
 from llm_intent.utils import CannedResponse, load_config
-from llm_intent.client import LLMClient
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -49,15 +49,17 @@ class LLMQuestionProxy:
     """Handler to communicate with an LLM via API or Webhook.
     Ask a question and it shall provide an answer."""
 
-    def __init__(self, client: Client):
-        self.client = client
+    def __init__(self, llm_client: LLMClient):
+        self.llm_client = llm_client
 
     def api_request(self, question: str) -> dict:
         """Send a request to the LLM API and return the response."""
-        logger.info("API Request - " + self.client.url + " - " + self.client.model)
+        logger.info(
+            "API Request - " + self.llm_client.url + " - " + self.llm_client.model
+        )
 
         try:
-            response = self.client.api_request(LLM_SYSTEM_PROMPT, question)
+            response = self.llm_client.api_request(LLM_SYSTEM_PROMPT, question)
 
             logger.info(response)
 
@@ -72,7 +74,7 @@ class LLMQuestionProxy:
     def webhook_request(self, question: str, context: dict) -> dict:
         """Send a request to the LLM API and return the response."""
         try:
-            response = self.client.webhook_request(question, context)
+            response = self.llm_client.webhook_request(question, context)
 
             return response
         except requests.exceptions.RequestException as e:
