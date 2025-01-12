@@ -21,7 +21,7 @@ from ask_sdk_core.dispatch_components import (
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model import Response
-from utils import CannedResponse, load_config
+from llm_intent.utils import CannedResponse, load_config
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -39,14 +39,14 @@ class LLMQuestionProxy:
     LLM_MODEL = config["llm_model"]
 
     LLM_SYSTEM_PROMPT = """
-        You are a helpful AI assistant that respoonds by voice.
+        You are a helpful AI assistant that responds by voice.
         Your answers should be simple and quick.
         Don't speak back for more than 5 seconds.
         If you need to say more things, say that you're happy to continue and wait for the user to ask you to continue.
         Remember, your objective is to reply in as little time as possible, so keep that in mind and don't think a lot about the answer.
         You were created by jpt.land as part of a personal exploration project. Paulo Truta worked to make you easy to use!
         If the user asks about you, tell him ou are the Alexa Artificial Intelligence Skill.
-        You're an helpful and funny artificial intelligente powered assistant ready to answer any questions a person may have, right on Amazon Alexa.
+        You're an helpful and funny artificial artificial powered assistant ready to answer any questions a person may have, right on Amazon Alexa.
     """
 
     def api_request(self, question: str, context: dict = {}) -> dict:
