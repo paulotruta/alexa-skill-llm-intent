@@ -11,14 +11,6 @@ You should setup your configuration file by copying `config.example.json` to `co
 - `llm_key`-> llm provider API key.
 - `llm_model` -> the model name/version to use with the provider API. Set to 'webhook' to proxy request as POST to `llm_api_url`, and sending `llm_key` as the `token` key of the json body.
 
-### Modifying Skill Package
-
-You can modify the skill package by changing the `skill-package/interactionModels/custom/en-US.json` file. This file contains the intents, slots and utterances that the skill will use to interact with the user.
-
-`skill-package/skill.json` contains the skill metadata, such as the name, description, and invocation name. This is not required to be changed to only run the skill in development mode, but will be necessary if you ever want to use this in a live environment as a published skill.
-
-For more information about the `skill-package` structure, check the [ASK CLI documentation](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format).
-
 ## Creating an Alexa Skill
 
 To use this template, you need to have a skill in your Alexa Developer Console. You can do this in the the Alexa Developer Console itself and upload a build package manually, or use the ASK CLI to create a new project using this repository as template.
@@ -72,6 +64,20 @@ Once the skill is created, you can test it in the [Alexa Developer Console](http
 - `Alexa, I want to ask <invokation_name> a question`
 - `Alexa, ask <invokation_name> about our solar system`
 - `Alexa, ask <invokation_name> to explain the NP theorem`
+
+## Modifying Skill Package
+
+You can modify the skill package by changing the `skill-package/interactionModels/custom/en-US.json` file. This file contains the intents, slots and utterances that the skill will use to interact with the user.
+
+`skill-package/skill.json` contains the skill metadata, such as the name, description, and invocation name. This is not required to be changed to only run the skill in development mode, but will be necessary if you ever want to use this in a live environment as a published skill.
+
+For more information about the `skill-package` structure, check the [ASK CLI documentation](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format).
+
+## Modifying the Skill Code
+
+The skill code is a python lambda function and is located in the `lambda/` folder. The main file is `lambda_function.py`, which contains the Lambda handlerfor the supported intents, and is the entrypoint for the rest of the code.
+
+Feel free to modify the code to add more intents, or change the behavior of the existing ones, and submit a PR. The code is written in Python 3.8 and uses the `ask-sdk` library to interact with the Alexa Skills Kit.
 
 # Disclaimer
 
