@@ -45,10 +45,6 @@ LLM_SYSTEM_PROMPT = """
 """
 
 
-class Foo:
-    BAR = "hello"
-
-
 class LLMQuestionProxy:
     """Handler to communicate with an LLM via API or Webhook.
     Ask a question and it shall provide an answer."""
