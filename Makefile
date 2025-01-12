@@ -6,7 +6,7 @@ BUILD_DIR=build
 
 release: clean
 	mkdir $(BUILD_DIR)
-	zip -r $(BUILD_DIR)/alexa-skill-llm-intent-release.zip lambda -x lambda/\config.example.json -x lambda/\.venv/\*
+	zip -r $(BUILD_DIR)/alexa-skill-llm-intent-release.zip lambda -x lambda/\config.example.json -x lambda/\.venv/\*  -x "**/__pycache__/**"
 
 
 clean:
@@ -14,7 +14,6 @@ clean:
 
 
 dev: clean
-	cd lambda
 	python -m venv .venv
 	. .venv/bin/activate
-	pip install -r requirements.txt
+	pip install -r lambda/requirements-dev.txt

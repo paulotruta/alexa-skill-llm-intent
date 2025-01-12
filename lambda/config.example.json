@@ -1,4 +1,5 @@
 {
-    "Authorization": "<API-KEY>",
-    "session_token": "<session-token>"
+    "llm_url": "",
+    "llm_key": "",
+    "llm_model": ""
 }
