@@ -128,4 +128,5 @@ dmypy.json
 config.json
 
 /.idea/
-/.envrc
+!/.envrc
+/.envrc.private
