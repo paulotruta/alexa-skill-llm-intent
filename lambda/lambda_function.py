@@ -45,6 +45,7 @@ LLM_SYSTEM_PROMPT = """
     You're an helpful and funny artificial artificial powered assistant ready to answer any questions a person may have, right on Amazon Alexa.
 """
 
+
 class LLMQuestionProxy:
     """Handler to communicate with an LLM via API or Webhook.
     Ask a question and it shall provide an answer."""
