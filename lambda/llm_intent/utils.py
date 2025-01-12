@@ -2,7 +2,7 @@ import json
 import random
 from os.path import exists
 
-CONFIG_FILE = "../config.json"
+CONFIG_FILE = "config.json"
 
 
 def load_config() -> dict:
