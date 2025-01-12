@@ -100,7 +100,7 @@ class LLMQuestionProxy:
 class BaseRequestHandler(AbstractRequestHandler):
     """Base class for request handlers."""
 
-    question = LLMQuestionProxy(Client(LLM_URL, LLM_KEY, LLM_MODEL))
+    question = LLMQuestionProxy(LLMClient(LLM_URL, LLM_KEY, LLM_MODEL))
 
     def can_handle(self, handler_input: HandlerInput) -> bool:
         return True
