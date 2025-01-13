@@ -162,11 +162,15 @@ You can modify the skill package by changing the `skill-package/interactionModel
 
 For more information about the `skill-package` structure, check the [Skill Package Format documentation](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format).
 
+>*When using the `(Automated) Makefile` method to manage Alexa Hosted Skill targets, you can debug their dialog model by using the `make dialog skill=<skill_slug>` command, which will open the dialog model test CLI for that specific skill.*
+
 ### Skill Lambda Function
 
 The skill code is a python lambda function and is located in the `lambda/` folder. The main file is `lambda_function.py`, which contains the Lambda handlerfor the supported intents, and is the entrypoint for the rest of the code.
 
-Feel free to modify the code to add more intents, or change the behavior of the existing ones, and submit a PR. The code is written in Python 3.8 and uses the `ask-sdk` library to interact with the Alexa Skills Kit.
+>*ℹ️ When using the `(Automated) Makefile` method to manage Alexa Hosted Skill targets, you can debug the lambda function by using the `make debug skill=<skill_slug>` command, which enables you to test your skill code locally against your skill invocations by routing requests to your developer machine. This enables you to verify changes quickly to skill code as you can test without needing to deploy skill code to Lambda.*
+
+>*⚠️ Because of Alexa hosted skills limitations, debugging using `make debug skill=<skill_slug>` (or the `ask run` CLI command) is currently only available to customers in the NA region. You will only be able to use the debugger this way if your skill is hosted in one of the US regions.*
 
 # Disclaimer
 
