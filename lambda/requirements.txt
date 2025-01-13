@@ -1,2 +1,2 @@
-urllib3==1.26.15
+urllib3==2.2.3
 ask-sdk-core==1.19.0
