@@ -22,12 +22,15 @@ dev: clean
 
 # Hosted skill targets
 
+list:
+	@./dev.sh list
+
 new:
 	@echo "\n🎯 Creating a new hosted skill target\n"
 	@./dev.sh new
 	@echo "\n✅ Hosted skill created. To push repo code, run 'make update'"
 
-init:
+import:
 	@echo "\n🎯 Initializing hosted skill target with id $(id)\n"
 	@./dev.sh init $(id)
 	@echo "\n✅ Hosted skill initialized. To push repo code, run 'make update'"
@@ -35,7 +38,11 @@ init:
 update:
 	@echo "\n🎯 Updating hosted skill target $(skill)\n"
 	@./dev.sh update $(skill)
-	@echo "\n✅ Code updated in hosted skill. Please check the status and test in the Alexa Developer Console"
+	@echo "\n✅ Hosted skill $(skill) deployed. Check completion status in the Alexa Developer Console"
+
+config:
+	@echo "\n🎯 Setting config file and invocation name for hosted skill target $(skill)\n"
+	@./dev.sh config ${skill} $(file) ${invocation}
 
 dialog:
 	@echo "\n🎯 Starting dialog for hosted skill target $(skill)\n"
@@ -44,6 +51,3 @@ dialog:
 debug:
 	@echo "\n🎯 Debugging hosted skill target $(skill)\n"
 	@./dev.sh debug $(skill)
-
-list:
-	@./dev.sh list

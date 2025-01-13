@@ -72,6 +72,23 @@ case $COMMAND in
 
     update_hosted_skill_repo > /dev/null 2>&1
 
+    # Copy over the config file if it exists in ../<$HOSTED_BUILD_DIR>_config.json
+    if [ -f "../${HOSTED_BUILD_DIR}_config.json" ]; then
+      cp "../${HOSTED_BUILD_DIR}_config.json" "./lambda/config.json"
+    else
+      # Create one from the default config
+      cp "./lambda/config.json" "../${HOSTED_BUILD_DIR}_config.json"
+    fi
+
+    # Copy over the invocation name if it exists as "invocation_name" in ../<$HOSTED_BUILD_DIR>_config.json
+    INVOCATION_NAME=$(cat "../${HOSTED_BUILD_DIR}_config.json" | jq -r '.invocation_name')
+    if [ -z "$INVOCATION_NAME" ]; then
+      echo "Invocation name not found in the config file. Skipping invocation name update"
+    else
+      echo "Updating invocation name to $INVOCATION_NAME"
+      sed -i '' "s/\"invocationName\": \"[^\"]*\"/\"invocationName\": \"$INVOCATION_NAME\"/g" "./skill-package/interactionModels/custom/en-US.json"
+    fi
+
     git add .
     git commit -a -m "Trigger update from alexa-skill-llm-intent" --no-verify && git push
 
@@ -85,13 +102,24 @@ case $COMMAND in
     ls -ld */ | awk '{sub(/\/$/, "", $9); print $9 " -> Created on " $6 " " $7 " " $8}'
     ;;
 
-  deploy)
-    echo "Deploying the code from the skill hosted repo"
-    ask deploy
+  config)
+    echo "🔗 Setting config file and invokation naem for hosted skill"
+    SKILL_SLUG=${2}
+    CONFIG_FILE=${3}
+
+    # Check if the config file exists in the provided path
+    if [ -f "$CONFIG_FILE" ]; then
+      cp "$CONFIG_FILE" "./build/hosted/${SKILL_SLUG}_config.json"
+    else
+      echo "Config file not found. Please provide the config file path"
+      exit 1
+    fi
+
+    echo "🔗 Finished setting config file and invocation name for $SKILL_SLUG. Run 'make update skill=$SKILL_SLUG' to apply changes."
     ;;
 
   dialog)
-    echo "Debugging the code from the skill hosted repo"
+    echo "Debugging the dialog model from the skill hosted repo"
     HOSTED_BUILD_DIRNAME=${2}
     DIALOG_LOCALE=${3:-en-US}
     cd build/hosted/$HOSTED_BUILD_DIRNAME
