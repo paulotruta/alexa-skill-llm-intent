@@ -34,44 +34,42 @@ COMMAND=$1
 
 case $COMMAND in
   new)
-    echo "\n🎯 Creating a new hosted skill target"
+
     mkdir -p build
     mkdir -p build/hosted
     cd build/hosted
+
     ask new
 
-    echo "\n🔗 Finished. Current targets:"
+    echo "🔗 Finished. Current targets:"
     ls
-
-    echo "\n✅ New blank hosted skill target repo created. Now run 'make update skill=<skill-slug>' command to update the hosted skill repo with the local repo contents."
     ;;
 
   init)
+
     if [ -z "$2" ]; then
       echo "Usage: ./dev.sh init <skill-id>"
       exit 1
     fi
     SKILL_ID=$2
-    echo "Initializing project with skill id: $SKILL_ID"
+
     mkdir -p build
     mkdir -p build/hosted
     cd build/hosted
     pwd
     ask init --hosted-skill-id $SKILL_ID
 
-    echo "\n🔗 Finished. Current targets:"
+    echo "🔗 Finished. Current targets:"
     ls
-
-    echo "\n✅ Initialized hosted skill target repo with skill id: $SKILL_ID. Now run 'make update skill=<skill-slug>' command to update the hosted skill repo with the local repo contents."
     ;;
 
   update)
-    echo "\n📤 Updating the hosted skill target repo with local repo contents"
     cd build/hosted
     # Hosted build directory can be given as an argument, otherwise its $(ls -d */ | grep -v build | head -n 1)
     HOSTED_BUILD_DIR=${2:-$(ls -d */ | grep -v build | head -n 1)}
     cd $HOSTED_BUILD_DIR
     echo "Updating hosted skill target repo: $HOSTED_BUILD_DIR"
+
     update_hosted_skill_repo
 
     git add .
@@ -80,6 +78,7 @@ case $COMMAND in
     resync_hosted_skill_repo
     # ask smapi update-skill-manifest --skill-id $SKILL_ID --manifest file://skill.json
     # ask smapi update-interaction-model --skill-id $SKILL_ID --locale en-US --interaction-model file://models/en-US.json
+    echo "🔗 Finished updating $HOSTED_BUILD_DIR"
     ;;
 
   deploy)

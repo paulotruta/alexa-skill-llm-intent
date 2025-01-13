@@ -7,13 +7,10 @@ BUILD_REPO_DIR=build/hosted
 BUILD_PACKAGE_DIR=build/package
 
 
-release: clean
+package: clean
 	mkdir -p $(BUILD_DIR)
 	mkdir -p $(BUILD_PACKAGE_DIR)
 	zip -r $(BUILD_PACKAGE_DIR)/alexa-skill-llm-intent-release.zip lambda -x lambda/\config.example.json -x lambda/\.venv/\*  -x "**/__pycache__/**"
-
-import-package:
-	ask smapi import-skill-package -s $(id) -f ./$(BUILD_DIR)/alexa-skill-llm-intent-release.zip
 
 clean:
 	rm -rf $(BUILD_PACKAGE_DIR)
@@ -23,30 +20,19 @@ dev: clean
 	. .venv/bin/activate
 	pip install -r lambda/requirements-dev.txt
 
+# Hosted skill targets
+
 new:
+	@echo "\n🎯 Creating a new hosted skill target\n"
 	./dev.sh new
-	# mkdir -p $(BUILD_DIR)
-	# mkdir -p $(BUILD_REPO_DIR)
-	# cd $(BUILD_REPO_DIR) && ask new && cd $(ls -d */ | grep -v build | head -n 1) && cp -r ../../* ./ && git commit -a -m "Trigger init from alexa-skill-llm-intent" && git push
-	@echo "\n✅ Code initialized in hosted skill. Please manage the changes in ./$(BUILD_REPO_DIR), or deploy with 'make deploy'"
+	@echo "\n✅ Hosted skill created. To push repo code, run 'make update'"
 
 init:
+	@echo "\n🎯 Initializing hosted skill target with id $(id)\n"
 	./dev.sh init $(id)
-	# mkdir -p $(BUILD_DIR)
-	# mkdir -p $(BUILD_REPO_DIR)
-	# cd $(BUILD_REPO_DIR) && ask init --hosted-skill-id $(id) && cd $(ls -d */ | grep -v build | head -n 1) && cp -r ../../* ./ && git commit -a -m "Trigger init from alexa-skill-llm-intent" && git push
-
-
-model:
-	cd $(BUILD_REPO_DIR) && ask smapi update-model -s $(id) -l en-US -f ./skill-package/interactionModels/custom/en-US.json
+	@echo "\n✅ Hosted skill initialized. To push repo code, run 'make update'"
 
 update:
-	./dev.sh update
-	# mkdir -p $(BUILD_DIR)
-	# mkdir -p $(BUILD_REPO_DIR)
-	# pwd && cd $(BUILD_REPO_DIR) && cd $(ls -d */ | grep -v build | head -n 1) && cp -r ../../* ./
-	@echo "\n✅ Code updated in hosted skill. Please manage the changes in ./$(build_repo_dir), or deploy with 'make deploy'"
-
-make deploy:
-	cd $(BUILD_REPO_DIR) && cd $(ls -d */ | grep -v build | head -n 1) && git commit -a -m "Trigger deploy from alexa-skill-llm-intent" && git push
-	@echo "\n✅ Code deployed started for hosted skill. Please check the status in the Alexa Developer Console"
+	@echo "\n🎯 Updating hosted skill target $(skill)\n"
+	./dev.sh update $(skill)
+	@echo "\n✅ Code updated in hosted skill. Please check the status and test in the Alexa Developer Console"
