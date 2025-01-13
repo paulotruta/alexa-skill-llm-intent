@@ -4,19 +4,19 @@
 BUILD_DIR=build
 
 BUILD_REPO_DIR=build/hosted
-BUILD_REPO_DIR=build/package
+BUILD_PACKAGE_DIR=build/package
 
 
 release: clean
 	mkdir -p $(BUILD_DIR)
-	mkdir -p $(build_package_dir)
-	zip -r $(build_package_dir)/alexa-skill-llm-intent-release.zip lambda -x lambda/\config.example.json -x lambda/\.venv/\*  -x "**/__pycache__/**"
+	mkdir -p $(BUILD_PACKAGE_DIR)
+	zip -r $(BUILD_PACKAGE_DIR)/alexa-skill-llm-intent-release.zip lambda -x lambda/\config.example.json -x lambda/\.venv/\*  -x "**/__pycache__/**"
 
 import-package:
 	ask smapi import-skill-package -s $(id) -f ./$(BUILD_DIR)/alexa-skill-llm-intent-release.zip
 
 clean:
-	rm -rf $(build_package_dir)
+	rm -rf $(BUILD_PACKAGE_DIR)
 
 dev: clean
 	python -m venv .venv
