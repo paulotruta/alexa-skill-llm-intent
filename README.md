@@ -21,13 +21,20 @@ You should setup your configuration file by copying `config.example.json` to `co
 
 ## Creating an Alexa Skill
 
-To use this template, you need to have a skill in your Alexa Developer Console. You can do this in the the Alexa Developer Console itself and upload a build package manually, or use the ASK CLI to create a new project using this repository as template.
+To use this template, you need to at least have an account setup in the [Alexa Developer Console](https://developer.amazon.com/alexa).
 
-### Using the Makefile (Alexa Hosted Skills Management)
+**There's three ways you can use this template in a skill:**
+- **Automated ->** Using the `Makefile` to create and manage a new or imported Alexa Hosted Skill project
+- **Manual ->** in the the `Alexa Developer Console` itself, by uploading a build package
+- **Advanced ->** Using the `ask CLI` to create and manage a new AWS-hosted or Self-hosted skill project using this repository as template.
 
-ℹ️ This is the recommended way to create a new Alexa Skill using this template. It leverages the Ask CLI to create a new project and deploy it to your Alexa Developer Console. You can have multiple targets and deploy the template to different skills.
+### Automated - Using the Makefile (Alexa Hosted Skills Management)
+
+>*ℹ️ This is the recommended way to create a new Alexa Skill using this template. It leverages the Ask CLI to create a new project and deploy it to your Alexa Developer Console. You can have multiple targets and deploy the template to different skills.*
 
 This method supports version control, testing, and debugging, and integrates with the Alexa Developer Console seamlessly.
+
+>*⚠️ Make sure you have the `ask` CLI installed and configured with your Amazon Developer account before running this command. If not, install it by running `npm install -g ask-cli` and configure it by running `ask configure`.*
 
 #### Create a new Alexa Skill
 
@@ -37,7 +44,16 @@ Run the following command in your terminal:
 make new
 ```
 
-And follow the wizard to create a new Alexa Skill project as a target. This will create a new Alexa Hosted Skill target in your account, which you can then use to update the skill to use this template.
+And follow the wizard to create a new Alexa Skill project as a target, choosing the following options:
+
+- **? Choose a modeling stack for your skill:**  `Interaction Model`
+- **? Choose the programming language you will use to code your skill:**  `Python`
+- **? Choose a method to host your skill's backend resources:**  `Alexa Hosted`
+
+>*⚠️ If you don't choose the specified options on the New Skill Wizard, the process could fail as this template is made to run an Interaction Model skill in Python, while the Makefile method currently only supports Alexa Hosted skills.*
+
+This will create a new Alexa Hosted Skill target in your account, which you can then use to update the skill to use this template.
+
 
 #### Importing an existing Alexa Skill
 
@@ -65,7 +81,7 @@ perplexitysearch -> Created on Jan 13 02:12
 testapplication -> Created on Jan 13 02:45
 ```
 
-*ℹ️ These are available in the `build/hosted` folder, and are the target hosted repositories, that can individually be managed by navigating to the respective folder and using the `ask` CLI.*
+>*ℹ️ These are available in the `build/hosted` folder, and are the target hosted repositories, that can individually be managed by navigating to the respective folder and using the `ask` CLI.*
 
 #### Updating the Skill
 
@@ -81,11 +97,11 @@ This will deploy the code to the Alexa Developer Console and trigger a Model and
 
 You should also run this every time you make changes to the skill package or the lambda function code, to update the skill in the Alexa Developer Console.
 
-*⚠️ Currently this project only allows sync in one direction, from the local repository to the Alexa Developer Console. Any changes made in the Alexa Developer Console will be overwritten by the local repository.*
+>*⚠️ Currently this project only allows sync in one direction, from the local repository to the Alexa Developer Console. Any changes made in the Alexa Developer Console will be overwritten by the local repository when you run the update command.*
 
-### Using the Alexa Developer Console (Manual)
+### Manual - Using the Alexa Developer Console
 
-*ℹ️ This method is recommended for beginners, as it requires less configuration and manual steps. Follow this method if you are not familiar with the ASK CLI and want to use the Alexa Developer Console directly.*
+>*ℹ️ This method is recommended for beginners, as it requires less configuration and manual steps. Follow this method if you are not familiar with the ASK CLI and want to use the Alexa Developer Console directly.*
 
 1. Make sure you the `config.json` file and `invokation_name` value in `skill-package/interactionModels/custom/en-US.json` is setup correctly.
 2. Build the upload package by running `make package` (to later import it in the Alexa Developer Console).
@@ -96,9 +112,9 @@ You should also run this every time you make changes to the skill package or the
 
 For more information, check the documentation here: [Importing a Skill into the Alexa Developer Console](https://developer.amazon.com/en-US/docs/alexa/hosted-skills/alexa-hosted-skills-create.html#create-console).
 
-### Using the Ask CLI
+### Advanced - Using the Ask CLI
 
-*ℹ️ This method is not recommended for beginners, as it requires more manual steps and configuration and requires using an AWS account you own to host the lambda function. Only follow this method if you know what you're doing and have previous experience with Alexa Skills development using AWS.*
+>*ℹ️ This method is not recommended for beginners, as it requires more manual steps and configuration and requires using an AWS account you own to host the lambda function. Only follow this method if you know what you're doing and have previous experience with Alexa Skills development using AWS.*
 
 Choose a location for your new skill project (not this repository, as it will be cloned). Run the following command in your terminal (at your chosen location) to start a new skill project using this template:
 
@@ -114,7 +130,7 @@ After the project is created, you can deploy it to your Alexa Developer Console 
 cd llm-intent
 ask deploy
 ```
-*⚠️ Before running deploy, make sure you modify the `config.json` file and `invokation_name` value in `skill-package/modelInteractions/custom/en-US.json` with the required configuration for the skill to work.*
+>*⚠️ Before running deploy, make sure you modify the `config.json` file and `invokation_name` value in `skill-package/modelInteractions/custom/en-US.json` with the required configuration for the skill to work.*
 
 Full Documentation on the Ask CLI can be found [here](https://developer.amazon.com/en-US/docs/alexa/hosted-skills/alexa-hosted-skills-ask-cli.html).
 
@@ -128,7 +144,17 @@ Once the skill is created, you can test it in the [Alexa Developer Console](http
 - `Alexa, ask <invokation_name> about our solar system`
 - `Alexa, ask <invokation_name> to explain the NP theorem`
 
-## Modifying Skill Package
+## Development
+
+### Local Development
+
+To develop the skill locally, you should activate the virtual environment and install the required dependencies. You can do this by running:
+
+```bash
+make dev
+```
+
+### Skill Package
 
 You can modify the skill package by changing the `skill-package/interactionModels/custom/en-US.json` file. This file contains the intents, slots and utterances that the skill will use to interact with the user.
 
@@ -136,7 +162,7 @@ You can modify the skill package by changing the `skill-package/interactionModel
 
 For more information about the `skill-package` structure, check the [ASK CLI documentation](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format).
 
-## Modifying the Skill Code
+### Skill Lambda Function
 
 The skill code is a python lambda function and is located in the `lambda/` folder. The main file is `lambda_function.py`, which contains the Lambda handlerfor the supported intents, and is the entrypoint for the rest of the code.
 
