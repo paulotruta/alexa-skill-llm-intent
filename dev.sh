@@ -90,6 +90,24 @@ case $COMMAND in
     ask deploy
     ;;
 
+  dialog)
+    echo "Debugging the code from the skill hosted repo"
+    HOSTED_BUILD_DIRNAME=${2}
+    DIALOG_LOCALE=${3:-en-US}
+    cd build/hosted/$HOSTED_BUILD_DIRNAME
+    pwd
+    ask dialog --locale $DIALOG_LOCALE
+    ;;
+
+  debug)
+    echo "Debugging the code from the skill hosted repo"
+    HOSTED_BUILD_DIRNAME=${2}
+    echo $HOSTED_BUILD_DIRNAME
+    cd build/hosted/$HOSTED_BUILD_DIRNAME
+    pwd
+    ask run
+    ;;
+
   *)
     echo "Invalid command: $COMMAND"
     echo "Usage: ./dev.sh <command>"

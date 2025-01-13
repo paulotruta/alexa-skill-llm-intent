@@ -37,5 +37,13 @@ update:
 	@./dev.sh update $(skill)
 	@echo "\n✅ Code updated in hosted skill. Please check the status and test in the Alexa Developer Console"
 
+dialog:
+	@echo "\n🎯 Starting dialog for hosted skill target $(skill)\n"
+	@./dev.sh dialog $(skill)
+
+debug:
+	@echo "\n🎯 Debugging hosted skill target $(skill)\n"
+	@./dev.sh debug $(skill)
+
 list:
 	./dev.sh list
