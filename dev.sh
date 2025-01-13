@@ -70,15 +70,19 @@ case $COMMAND in
     cd $HOSTED_BUILD_DIR
     echo "Updating hosted skill target repo: $HOSTED_BUILD_DIR"
 
-    update_hosted_skill_repo
+    update_hosted_skill_repo > /dev/null 2>&1
 
     git add .
     git commit -a -m "Trigger update from alexa-skill-llm-intent" --no-verify && git push
 
     resync_hosted_skill_repo
-    # ask smapi update-skill-manifest --skill-id $SKILL_ID --manifest file://skill.json
-    # ask smapi update-interaction-model --skill-id $SKILL_ID --locale en-US --interaction-model file://models/en-US.json
-    echo "🔗 Finished updating $HOSTED_BUILD_DIR"
+    echo "🔗 Finished updating $HOSTED_BUILD_DIR. "
+    ;;
+
+  list)
+    echo "🔗 Available Targets:"
+    cd build/hosted
+    ls -ld */ | awk '{sub(/\/$/, "", $9); print $9 " -> Created on " $6 " " $7 " " $8}'
     ;;
 
   deploy)
@@ -89,7 +93,7 @@ case $COMMAND in
   *)
     echo "Invalid command: $COMMAND"
     echo "Usage: ./dev.sh <command>"
-    echo "Commands can be: init, update, deploy"
+    echo "Commands can be: new, init, update, deploy"
     exit 1
     ;;
 esac

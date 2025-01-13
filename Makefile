@@ -24,15 +24,18 @@ dev: clean
 
 new:
 	@echo "\n🎯 Creating a new hosted skill target\n"
-	./dev.sh new
+	@./dev.sh new
 	@echo "\n✅ Hosted skill created. To push repo code, run 'make update'"
 
 init:
 	@echo "\n🎯 Initializing hosted skill target with id $(id)\n"
-	./dev.sh init $(id)
+	@./dev.sh init $(id)
 	@echo "\n✅ Hosted skill initialized. To push repo code, run 'make update'"
 
 update:
 	@echo "\n🎯 Updating hosted skill target $(skill)\n"
-	./dev.sh update $(skill)
+	@./dev.sh update $(skill)
 	@echo "\n✅ Code updated in hosted skill. Please check the status and test in the Alexa Developer Console"
+
+list:
+	./dev.sh list

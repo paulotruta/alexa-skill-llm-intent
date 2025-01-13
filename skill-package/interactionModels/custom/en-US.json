@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "perplexity search",
+      "invocationName": "artificial intelligence",
       "modelConfiguration": {
         "fallbackIntentSensitivity": {
           "level": "LOW"
