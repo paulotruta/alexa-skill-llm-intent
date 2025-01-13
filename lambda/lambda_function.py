@@ -9,7 +9,6 @@
 # Please visit https://alexa.design/cookbook for additional examples on
 # implementing Alexa features!
 
-import json
 import logging
 
 import requests  # noqa: E402
@@ -21,6 +20,7 @@ from ask_sdk_core.dispatch_components import (
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_model import Response
+from llm_intent.llm_client import LLMClient
 from llm_intent.utils import CannedResponse, load_config
 
 logger = logging.getLogger(__name__)
@@ -29,92 +29,55 @@ logger.setLevel(logging.INFO)
 config = load_config()
 canned_response = CannedResponse("en-US")
 
+LLM_URL = config["llm_url"]
+LLM_KEY = config["llm_key"]
+LLM_MODEL = config["llm_model"]
+
+
+LLM_SYSTEM_PROMPT = """
+    You are a helpful AI assistant that responds by voice.
+    Your answers should be simple and quick.
+    Don't speak back for more than 5 seconds.
+    If you need to say more things, say that you're happy to continue and wait for the user to ask you to continue.
+    Remember, your objective is to reply in as little time as possible, so keep that in mind and don't think a lot about the answer.
+    You were created by jpt.land as part of a personal exploration project. Paulo Truta worked to make you easy to use!
+    If the user asks about you, tell him ou are the Alexa Artificial Intelligence Skill.
+    You're an helpful and funny artificial artificial powered assistant ready to answer any questions a person may have, right on Amazon Alexa.
+"""
+
 
 class LLMQuestionProxy:
     """Handler to communicate with an LLM via API or Webhook.
     Ask a question and it shall provide an answer."""
 
-    LLM_URL = config["llm_url"]
-    LLM_KEY = config["llm_key"]
-    LLM_MODEL = config["llm_model"]
+    def __init__(self, llm_client: LLMClient):
+        self.llm_client = llm_client
 
-    LLM_SYSTEM_PROMPT = """
-        You are a helpful AI assistant that responds by voice.
-        Your answers should be simple and quick.
-        Don't speak back for more than 5 seconds.
-        If you need to say more things, say that you're happy to continue and wait for the user to ask you to continue.
-        Remember, your objective is to reply in as little time as possible, so keep that in mind and don't think a lot about the answer.
-        You were created by jpt.land as part of a personal exploration project. Paulo Truta worked to make you easy to use!
-        If the user asks about you, tell him ou are the Alexa Artificial Intelligence Skill.
-        You're an helpful and funny artificial artificial powered assistant ready to answer any questions a person may have, right on Amazon Alexa.
-    """
-
-    def api_request(self, question: str, context: dict = {}) -> dict:
+    def api_request(self, question: str) -> dict:
         """Send a request to the LLM API and return the response."""
-        logger.info("API Request - " + self.LLM_URL + " - " + self.LLM_MODEL)
-
-        headers = {
-            "Authorization": f"Bearer {self.LLM_KEY}",
-            "Content-Type": "application/json",
-            "HTTP_Referer": "wordpress.jpt.land/ai",
-            "X-Title": "jpt.land AI",
-        }
+        logger.info(
+            "API Request - " + self.llm_client.url + " - " + self.llm_client.model
+        )
 
         try:
-            response = requests.post(
-                url=self.LLM_URL,
-                headers=headers,
-                data=json.dumps(
-                    {
-                        "model": self.LLM_MODEL,
-                        "messages": [
-                            {
-                                "role": "system",
-                                "content": [
-                                    {"type": "text", "text": self.LLM_SYSTEM_PROMPT}
-                                ],
-                            },
-                            {
-                                "role": "user",
-                                "content": [{"type": "text", "text": question}],
-                            },
-                        ],
-                    }
-                ),
-            )
+            response = self.llm_client.api_request(LLM_SYSTEM_PROMPT, question)
 
-            response.raise_for_status()
+            logger.info(response)
 
-            logger.info(response.json())
-
-            return {"message": response.json()["choices"][0]["message"]["content"]}
+            return {"message": response["choices"][0]["message"]["content"]}
         except requests.exceptions.RequestException as e:
             logger.error(f"HTTP Request failed: {e}")
             # Return an error message, but only say part of the error message
             return {
-                "message": f"Sorry, I encontered an error thinking about your \
-                    request: {str(e)[:100]}"
+                "message": f"Sorry, I encountered an error thinking about your request: {str(e)[:100]}"
             }
 
     def webhook_request(self, question: str, context: dict) -> dict:
         """Send a request to the LLM API and return the response."""
-
-        local_payload = {
-            "token": self.LLM_KEY,
-            "question": question,
-        }
-
-        payload = {**context, **local_payload}
-
         try:
-            # Send a POST request
-            response = requests.post(self.LLM_URL, json=payload)
+            response = self.llm_client.webhook_request(question, context)
 
-            # Raise an exception if the request was not successful
-            response.raise_for_status()
-
-            # Parse and return response JSON
-            return response.json()
+            return response
         except requests.exceptions.RequestException as e:
             logger.error(f"HTTP Request failed: {e}")
             # Return an error message, but only say part of the error message
@@ -125,7 +88,7 @@ class LLMQuestionProxy:
 
     def ask(self, question: str, context: dict = {}) -> dict:
         """Ask a question and get a response."""
-        if self.LLM_MODEL != "webhook":
+        if LLM_MODEL != "webhook":
             logger.info("Using API request")
             return self.api_request(question)
         else:
@@ -136,7 +99,7 @@ class LLMQuestionProxy:
 class BaseRequestHandler(AbstractRequestHandler):
     """Base class for request handlers."""
 
-    question = LLMQuestionProxy()
+    question = LLMQuestionProxy(LLMClient(LLM_URL, LLM_KEY, LLM_MODEL))
 
     def can_handle(self, handler_input: HandlerInput) -> bool:
         return True
