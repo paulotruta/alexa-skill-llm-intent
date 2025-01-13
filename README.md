@@ -42,7 +42,7 @@ Please follow the wizard to start your Alexa skill project ->
 ? Choose a method to host your skill's backend resources:  Alexa-hosted skills
   Host your skill code by Alexa (free).                                                            ? Choose the default region for your skill:  eu-west-1
 ? Please type in your skill name:  test import llm
-? Please type in your folder name for the skill project (alphanumeric):  testimportllm
+? Please type in your folder name for the skill project (alphanumeric):  llm-intent
 ⠼ Creating your Alexa hosted skill. It will take about a minute.
 ```
 
