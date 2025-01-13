@@ -160,7 +160,7 @@ You can modify the skill package by changing the `skill-package/interactionModel
 
 `skill-package/skill.json` contains the skill metadata, such as the name, description, and invocation name. This is not required to be changed to only run the skill in development mode, but will be necessary if you ever want to use this in a live environment as a published skill.
 
-For more information about the `skill-package` structure, check the [ASK CLI documentation](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format).
+For more information about the `skill-package` structure, check the [Skill Package Format documentation](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format).
 
 ### Skill Lambda Function
 
