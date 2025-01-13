@@ -53,12 +53,45 @@ And follow the wizard to create a new Alexa Skill project as a target, choosing 
 
 >*⚠️ If you don't choose the specified options on the New Skill Wizard, the process could fail as this template is made to run an Interaction Model skill in Python, while the Makefile method currently only supports Alexa Hosted skills.*
 
-This will create a new Alexa Hosted Skill target in your account, which you can then use to update the skill to use this template.
+The skill will start being created:
+```
+🎯 Creating a new hosted skill target
+
+Please follow the wizard to start your Alexa skill project ->
+? Choose a modeling stack for your skill:  Interaction Model
+  The Interaction Model stack enables you to define the user interactions with a combination of utterances, intents, and slots.
+? Choose the programming language you will use to code your skill:  Python
+? Choose a method to host your skill's backend resources:  Alexa-hosted skills
+  Host your skill code by Alexa (free).
+? Choose the default region for your skill:  eu-west-1
+? Please type in your skill name:  gemini flash
+? Please type in your folder name for the skill project (alphanumeric):  geminiflash
+⠧ Creating your Alexa hosted skill. It will take about a minute.
+
+(...)
+
+Lambda code for gemini flash created at
+        ./lambda
+
+Skill schema and interactionModels for gemini flash created at
+        ./skill-package
+
+The skill has been enabled.
+
+Hosted skill provisioning finished. Skill-Id: amzn1.ask.skill.b9198cd2-7e05-4119-bc9b-fe264d2b7fe0
+Please follow the instructions at https://developer.amazon.com/en-US/docs/alexa/hosted-skills/alexa-hosted-skills-ask-cli.html to learn more about the usage of "git" for Hosted skill.
+🔗 Finished. Current targets:
+geminiflash             perplexitysearch        testapplication
+
+✅ Hosted skill created. To push repo code, run 'make update'
+```
+
+A new "hello world" Alexa Hosted Skill target will show up in your Alexa Developer account, and is now ready to be updated with the template code.
 
 
 #### Importing an existing Alexa Skill
 
-If you already have an existing Alexa Skill and want to import this template to it, you can run:
+If you already have an existing Alexa Skill and want to import this template to it (overriding any previous code, model interactions, and actions), you can run:
 
 ```bash
 make init id=<skill_id>
