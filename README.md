@@ -49,7 +49,7 @@ Please follow the wizard to start your Alexa skill project ->
 After the project is created, you can deploy it to your Alexa Developer Console by running:
 
 ```bash
-cd testimportllm
+cd llm-intent
 ask deploy
 ```
 
