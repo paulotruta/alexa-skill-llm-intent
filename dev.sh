@@ -10,6 +10,12 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+update_hosted_skill_repo(){
+    rsync -av --delete ../../../lambda ./
+    rsync -av --delete ../../../skill-package/interactionModels ./skill-package
+    rsync -av --delete ../../../skill-package/assets ./skill-package
+}
+
 resync_hosted_skill_repo(){
     git checkout dev
     git pull --rebase
@@ -52,12 +58,11 @@ case $COMMAND in
     cd build/hosted
     pwd
     ask init --hosted-skill-id $SKILL_ID
-    cd $(ls -d */ | grep -v build | head -n 1)
-    pwd
-    rsync -av --exclude='build' --exclude='.git' --exclude='.ask' --exclude='skill-package/skill.json' ../../../ ./
-    git add .
-    git commit -a -m "Trigger init from alexa-skill-llm-intent" --no-verify && git push
-    resync_hosted_skill_repo
+
+    echo "\n🔗 Finished. Current targets:"
+    ls
+
+    echo "\n✅ Initialized hosted skill target repo with skill id: $SKILL_ID. Now run 'make update skill=<skill-slug>' command to update the hosted skill repo with the local repo contents."
     ;;
 
   update)
@@ -66,9 +71,12 @@ case $COMMAND in
     # Hosted build directory can be given as an argument, otherwise its $(ls -d */ | grep -v build | head -n 1)
     HOSTED_BUILD_DIR=${2:-$(ls -d */ | grep -v build | head -n 1)}
     cd $HOSTED_BUILD_DIR
-    rsync -av --exclude='build' --exclude='.git' --exclude='.ask' --exclude='skill-package/skill.json' ../../../ ./
+    echo "Updating hosted skill target repo: $HOSTED_BUILD_DIR"
+    update_hosted_skill_repo
+
     git add .
     git commit -a -m "Trigger update from alexa-skill-llm-intent" --no-verify && git push
+
     resync_hosted_skill_repo
     # ask smapi update-skill-manifest --skill-id $SKILL_ID --manifest file://skill.json
     # ask smapi update-interaction-model --skill-id $SKILL_ID --locale en-US --interaction-model file://models/en-US.json
