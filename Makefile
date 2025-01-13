@@ -28,7 +28,7 @@ new:
 	# mkdir -p $(BUILD_DIR)
 	# mkdir -p $(BUILD_REPO_DIR)
 	# cd $(BUILD_REPO_DIR) && ask new && cd $(ls -d */ | grep -v build | head -n 1) && cp -r ../../* ./ && git commit -a -m "Trigger init from alexa-skill-llm-intent" && git push
-	@echo "\n✅ Code initialized in hosted skill. Please manage the changes in ./$(BUILD_REPO_DIR), or deploy with 'make deploy'"	
+	@echo "\n✅ Code initialized in hosted skill. Please manage the changes in ./$(BUILD_REPO_DIR), or deploy with 'make deploy'"
 
 init:
 	./dev.sh init $(id)
