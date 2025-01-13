@@ -46,4 +46,4 @@ debug:
 	@./dev.sh debug $(skill)
 
 list:
-	./dev.sh list
+	@./dev.sh list
