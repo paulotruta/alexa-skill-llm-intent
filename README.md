@@ -4,20 +4,21 @@ An Alexa Skill template that gives you a ready to use skill to start a turn conv
 
 ## Configuration
 
+### Requirements
+
+
+- [Alexa Developer Account](https://developer.amazon.com/alexa)
+- [ASK CLI](https://developer.amazon.com/en-US/docs/alexa/smapi/quick-start-alexa-skills-kit-command-line-interface.html)
+- [OpenAI API schema](https://github.com/openai/openai-openapi) compatible llm provider API url, key, and model name: [Open AI](https://platform.openai.com) / [Anthropic](https://www.anthropic.com/) / [OpenRouter](https://openrouter.ai/)
+- Python 3.8 (optional for local development)
+- [AWS Account](https://aws.amazon.com/) (optional for advanced deployment)
+
 ### Setting up Environment variables
 
 You should setup your configuration file by copying `config.example.json` to `config.json` and filling the required fields:
-- `llm_url` -> an Open AI API Compatible provider api url.
-- `llm_key`-> llm provider API key.
-- `llm_model` -> the model name/version to use with the provider API. Set to 'webhook' to proxy request as POST to `llm_api_url`, and sending `llm_key` as the `token` key of the json body.
-
-## Requirements
-
-- Python 3.8
-- [AWS Account](https://aws.amazon.com/)
-- [Alexa Developer Account](https://developer.amazon.com/alexa)
-- [ASK CLI](https://developer.amazon.com/en-US/docs/alexa/smapi/quick-start-alexa-skills-kit-command-line-interface.html)
-- [Open AI API Key](https://beta.openai.com/signup/) (or similar llm provider)
+- **`llm_url` ->** OpenAI API Schema Compatible provider api url, for example: `https://openrouter.ai/api/v1/chat/completions`
+- **`llm_key`->** Provider API key.
+- **`llm_model` ->** Model name/version to use with the provider API, for example: `google/gemini-2.0-flash-exp:free`. Set to 'webhook' to proxy request as POST to `llm_api_url`, and sending `llm_key` as the `token` key of the json body.
 
 ## Creating an Alexa Skill
 
