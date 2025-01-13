@@ -10,6 +10,15 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+resync_hosted_skill_repo(){
+    git checkout dev
+    git pull --rebase
+    git merge master
+    # If everything is managed via the script, then we can just push (no conflicts)
+    git push --no-verify
+    git checkout master
+}
+
 # Check if the command is valid, commands can be:
 # - init: Initialize the project with an existing skill id
 # - update: Update the skill hosted repo with the code from the local repo
@@ -42,18 +51,22 @@ case $COMMAND in
     ask init --hosted-skill-id $SKILL_ID
     cd $(ls -d */ | grep -v build | head -n 1)
     pwd
-    rsync -av --exclude='build' --exclude='.git' --exclude='.ask' ../../../ ./
+    rsync -av --exclude='build' --exclude='.git' --exclude='.ask' --exclude='skill-package/skill.json' ../../../ ./
+    git add .
     git commit -a -m "Trigger init from alexa-skill-llm-intent" --no-verify && git push
+    resync_hosted_skill_repo
     ;;
 
   update)
     echo "📤 Updating the hosted skill target repo with local repo contents"
+    cd build/hosted
     # Hosted build directory can be given as an argument, otherwise its $(ls -d */ | grep -v build | head -n 1)
     HOSTED_BUILD_DIR=${2:-$(ls -d */ | grep -v build | head -n 1)}
-    rsync -av --exclude='build' --exclude='.git' --exclude='.ask' ./ build/hosted/$HOSTED_BUILD_DIR/
-    cd build/hosted/$HOSTED_BUILD_DIR
+    cd $HOSTED_BUILD_DIR
+    rsync -av --exclude='build' --exclude='.git' --exclude='.ask' --exclude='skill-package/skill.json' ../../../ ./
+    git add .
     git commit -a -m "Trigger update from alexa-skill-llm-intent" --no-verify && git push
-
+    resync_hosted_skill_repo
     # ask smapi update-skill-manifest --skill-id $SKILL_ID --manifest file://skill.json
     # ask smapi update-interaction-model --skill-id $SKILL_ID --locale en-US --interaction-model file://models/en-US.json
     ;;
