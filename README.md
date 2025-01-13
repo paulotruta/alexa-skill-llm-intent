@@ -11,23 +11,96 @@ You should setup your configuration file by copying `config.example.json` to `co
 - `llm_key`-> llm provider API key.
 - `llm_model` -> the model name/version to use with the provider API. Set to 'webhook' to proxy request as POST to `llm_api_url`, and sending `llm_key` as the `token` key of the json body.
 
+## Requirements
+
+- Python 3.8
+- [AWS Account](https://aws.amazon.com/)
+- [Alexa Developer Account](https://developer.amazon.com/alexa)
+- [ASK CLI](https://developer.amazon.com/en-US/docs/alexa/smapi/quick-start-alexa-skills-kit-command-line-interface.html)
+- [Open AI API Key](https://beta.openai.com/signup/) (or similar llm provider)
+
 ## Creating an Alexa Skill
 
 To use this template, you need to have a skill in your Alexa Developer Console. You can do this in the the Alexa Developer Console itself and upload a build package manually, or use the ASK CLI to create a new project using this repository as template.
 
-### Using the Alexa Developer Console
+### Using the Makefile (Alexa Hosted Skills Management)
 
-1. Build the upload package by running `make build` (to later import it in the Alexa Developer Console).
-5. Create a new Alexa Skill in the Alexa Developer Console.
-6. Go in the Code tab of the Alexa Developer Console and click "Import Code".
-7. Select the zip file with the contents of this repository.
-8. Click "Save" and "Build Model". The skill should be ready to use.
+ℹ️ This is the recommended way to create a new Alexa Skill using this template. It leverages the Ask CLI to create a new project and deploy it to your Alexa Developer Console. You can have multiple targets and deploy the template to different skills.
+
+This method supports version control, testing, and debugging, and integrates with the Alexa Developer Console seamlessly.
+
+#### Create a new Alexa Skill
+
+Run the following command in your terminal:
+
+```bash
+make new
+```
+
+And follow the wizard to create a new Alexa Skill project as a target. This will create a new Alexa Hosted Skill target in your account, which you can then use to update the skill to use this template.
+
+#### Importing an existing Alexa Skill
+
+If you already have an existing Alexa Skill and want to import this template to it, you can run:
+
+```bash
+make init id=<skill_id>
+```
+
+This will import your skill as a Alexa Hosted Skill target, which you can then use to update the skill to use this template.
+
+#### List existing Alexa Hosted Skill targets
+
+You can list all the existing Alexa Hosted Skill targets being managed by this project by running:
+
+```bash
+make list
+```
+
+This will return a list of `<skill_slug>` and the date they were created or imported, for example:
+
+```
+🔗 Available Targets:
+perplexitysearch -> Created on Jan 13 02:12
+testapplication -> Created on Jan 13 02:45
+```
+
+*ℹ️ These are available in the `build/hosted` folder, and are the target hosted repositories, that can individually be managed by navigating to the respective folder and using the `ask` CLI.*
+
+#### Updating the Skill
+
+After creating a new skill or importing an existing one, you can update the skill to use this template.
+
+You can do this by running:
+
+```bash
+make update skill=<skill_slug>
+```
+
+This will deploy the code to the Alexa Developer Console and trigger a Model and lambda function build. Once the deployment finishes, it will be ready to use.
+
+You should also run this every time you make changes to the skill package or the lambda function code, to update the skill in the Alexa Developer Console.
+
+*⚠️ Currently this project only allows sync in one direction, from the local repository to the Alexa Developer Console. Any changes made in the Alexa Developer Console will be overwritten by the local repository.*
+
+### Using the Alexa Developer Console (Manual)
+
+*ℹ️ This method is recommended for beginners, as it requires less configuration and manual steps. Follow this method if you are not familiar with the ASK CLI and want to use the Alexa Developer Console directly.*
+
+1. Make sure you the `config.json` file and `invokation_name` value in `skill-package/interactionModels/custom/en-US.json` is setup correctly.
+2. Build the upload package by running `make package` (to later import it in the Alexa Developer Console).
+3. Create a new Alexa Skill in the Alexa Developer Console.
+4. Go in the Code tab of the Alexa Developer Console and click "Import Code".
+5. Select the zip file with the contents of this repository.
+6. Click "Save" and "Build Model". The skill should be ready to use.
 
 For more information, check the documentation here: [Importing a Skill into the Alexa Developer Console](https://developer.amazon.com/en-US/docs/alexa/hosted-skills/alexa-hosted-skills-create.html#create-console).
 
 ### Using the Ask CLI
 
-Run the following command in your terminal:
+*ℹ️ This method is not recommended for beginners, as it requires more manual steps and configuration and requires using an AWS account you own to host the lambda function. Only follow this method if you know what you're doing and have previous experience with Alexa Skills development using AWS.*
+
+Choose a location for your new skill project (not this repository, as it will be cloned). Run the following command in your terminal (at your chosen location) to start a new skill project using this template:
 
 ```bash
 ask new --template-url https://github.com/paulotruta/alexa-skill-llm-intent.git
@@ -35,23 +108,13 @@ ask new --template-url https://github.com/paulotruta/alexa-skill-llm-intent.git
 
 This will use the contents of this repository to create a new Alexa Skill project in your account. Fill the required information in the wizard, and the project will be created.
 
-```
-Please follow the wizard to start your Alexa skill project ->
-? Choose a modeling stack for your skill:  Interaction Model
-  The Interaction Model stack enables you to define the user interactions with a combination of    utterances, intents, and slots.
-? Choose a method to host your skill's backend resources:  Alexa-hosted skills
-  Host your skill code by Alexa (free).                                                            ? Choose the default region for your skill:  eu-west-1
-? Please type in your skill name:  llm intent
-? Please type in your folder name for the skill project (alphanumeric):  llm-intent
-⠼ Creating your Alexa hosted skill. It will take about a minute.
-```
-
 After the project is created, you can deploy it to your Alexa Developer Console by running:
 
 ```bash
 cd llm-intent
 ask deploy
 ```
+*⚠️ Before running deploy, make sure you modify the `config.json` file and `invokation_name` value in `skill-package/modelInteractions/custom/en-US.json` with the required configuration for the skill to work.*
 
 Full Documentation on the Ask CLI can be found [here](https://developer.amazon.com/en-US/docs/alexa/hosted-skills/alexa-hosted-skills-ask-cli.html).
 
