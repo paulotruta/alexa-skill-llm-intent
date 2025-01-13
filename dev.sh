@@ -28,13 +28,16 @@ COMMAND=$1
 
 case $COMMAND in
   new)
-    echo "🎯 Creating a new hosted skill target"
+    echo "\n🎯 Creating a new hosted skill target"
     mkdir -p build
     mkdir -p build/hosted
     cd build/hosted
     ask new
-    cd $(ls -d */ | grep -v build | head -n 1)
-    pwd
+
+    echo "\n🔗 Finished. Current targets:"
+    ls
+
+    echo "\n✅ New blank hosted skill target repo created. Now run 'make update skill=<skill-slug>' command to update the hosted skill repo with the local repo contents."
     ;;
 
   init)
@@ -58,7 +61,7 @@ case $COMMAND in
     ;;
 
   update)
-    echo "📤 Updating the hosted skill target repo with local repo contents"
+    echo "\n📤 Updating the hosted skill target repo with local repo contents"
     cd build/hosted
     # Hosted build directory can be given as an argument, otherwise its $(ls -d */ | grep -v build | head -n 1)
     HOSTED_BUILD_DIR=${2:-$(ls -d */ | grep -v build | head -n 1)}
