@@ -117,6 +117,16 @@ testapplication -> Created on Jan 13 02:45
 
 >*ℹ️ These are available in the `build/hosted` folder, and are the target hosted repositories, that can individually be managed by navigating to the respective folder and using the `ask` CLI.*
 
+#### Setting the Skill configuration file and invocation words
+
+When your skill was created or imported, it automatically use the `config.json` in the `lambda` directory as its configuration. But you might want to set a different configuration per target hosted skill. Use the following command to set a target configuration file:
+
+```bash
+make config skill=<skill_slug> file=<config_file_path>
+```
+
+This will make a copy of this file into `/build/hosted/<skill_slug>_config.json`, which will be used by the skill when it is updated. The invocation words for the skill are set at update time using the `invokation_name` value in the `config.json` file.
+
 #### Updating the Skill
 
 After creating a new skill or importing an existing one, you can update the skill to use this template.
@@ -132,6 +142,22 @@ This will deploy the code to the Alexa Developer Console and trigger a Model and
 You should also run this every time you make changes to the skill package or the lambda function code, to update the skill in the Alexa Developer Console.
 
 >*⚠️ Currently this project only allows sync in one direction, from the local repository to the Alexa Developer Console. Any changes made in the Alexa Developer Console will be overwritten by the local repository when you run the update command.*
+
+#### Debugging Dialog Model
+
+You can debug the dialog model (using `ask dialog`) for a skill target project by running:
+
+```bash
+make dialog skill=<skill_slug> locale=<locale>
+```
+
+#### Debugging Lambda Function
+
+You can debug the lambda function (using `ask run`) for a skill target project by running:
+
+```bash
+make debug skill=<skill_slug>
+```
 
 ### Manual - Using the Alexa Developer Console
 
