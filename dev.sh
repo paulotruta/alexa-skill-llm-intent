@@ -117,7 +117,7 @@ case $COMMAND in
     ;;
 
   config)
-    echo "🔗 Setting config file and invokation naem for hosted skill"
+    echo "🔗 Setting config file and invocation name for hosted skill"
     SKILL_SLUG=${2}
     CONFIG_FILE=${3}
 
