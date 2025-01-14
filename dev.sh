@@ -97,7 +97,11 @@ case $COMMAND in
       echo "Invocation name not found in the config file. Skipping invocation name update"
     else
       echo "Updating invocation name to $INVOCATION_NAME"
-      sed -i "s/\"invocationName\": \"[^\"]*\"/\"invocationName\": \"$INVOCATION_NAME\"/g" "./skill-package/interactionModels/custom/en-US.json"
+      if [ "$(uname)" = "Darwin" ]; then
+        sed -i '' "s/\"invocationName\": \"[^\"]*\"/\"invocationName\": \"$INVOCATION_NAME\"/" skill-package/interactionModels/custom/en-US.json
+      else
+        sed -i "s/\"invocationName\": \"[^\"]*\"/\"invocationName\": \"$INVOCATION_NAME\"/" skill-package/interactionModels/custom/en-US.json
+      fi
     fi
 
     git add .
