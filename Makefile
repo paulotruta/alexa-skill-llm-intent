@@ -26,28 +26,66 @@ list:
 	@./dev.sh list
 
 new:
-	@echo "\n🎯 Creating a new hosted skill target\n"
+	@echo "---"
+	@echo "🎯 Creating a new hosted skill target"
+	@echo "---"
+
 	@./dev.sh new
-	@echo "\n✅ Hosted skill created. To push repo code, run 'make update'"
+
+	@echo "---"
+	@echo "✅ Hosted skill created. To push repo code, run 'make update'"
+	@echo "---"
 
 import:
-	@echo "\n🎯 Initializing hosted skill target with id $(id)\n"
+	@echo "---"
+	@echo "🎯 Initializing hosted skill target with id $(id)"
+	@echo "---"
+
 	@./dev.sh init $(id)
-	@echo "\n✅ Hosted skill initialized. To push repo code, run 'make update'"
+
+	@echo "---"
+	@echo "✅ Hosted skill initialized. To push repo code, run 'make update'"
+	@echo "---"
 
 update:
-	@echo "\n🎯 Updating hosted skill target $(skill)\n"
-	@./dev.sh update $(skill)
-	@echo "\n✅ Hosted skill $(skill) deployed. Check completion status in the Alexa Developer Console"
+	@echo "---"
+	@echo "🎯 Updating hosted skill target $(skill)"
+	@echo "---"
 
+	@./dev.sh update $(skill)
+
+	@echo "---"
+	@echo "✅ Hosted skill $(skill) deployed. Check completion status in the Alexa Developer Console"
+	@echo "---"
 config:
-	@echo "\n🎯 Setting config file and invocation name for hosted skill target $(skill)\n"
+	@echo "---"
+	@echo "🎯 Setting config file and invocation name for hosted skill target $(skill)"
+	@echo "---"
+
 	@./dev.sh config ${skill} $(file) ${invocation}
 
+	@echo "---"
+	@echo "✅ Config file and invocation name set for hosted skill target $(skill)"
+	@echo "---"
+
 dialog:
-	@echo "\n🎯 Starting dialog for hosted skill target $(skill)\n"
+	@echo "---"
+	@echo "🎯 Starting dialog for hosted skill target $(skill)"
+	@echo "---"
+
 	@./dev.sh dialog $(skill)
 
+	@echo "---"
+	@echo "✅ Dialog Session for hosted skill target $(skill) terminated"
+	@echo "---"
+
 debug:
-	@echo "\n🎯 Debugging hosted skill target $(skill)\n"
+	@echo "---"
+	@echo "🎯 Debugging hosted skill target $(skill)"
+	@echo "---"
+
 	@./dev.sh debug $(skill)
+
+	@echo "---"
+	@echo "✅ Debugging session for hosted skill target $(skill) terminated"
+	@echo "---"
