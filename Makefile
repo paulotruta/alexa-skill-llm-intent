@@ -23,7 +23,13 @@ dev: clean
 # Hosted skill targets
 
 list:
+	@echo "---"
+	@echo "🎯 Listing available hosted skill targets"
+	@echo "---"
+
 	@./dev.sh list
+
+	@echo "---"
 
 new:
 	@echo "---"

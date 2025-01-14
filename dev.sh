@@ -112,7 +112,6 @@ case $COMMAND in
     ;;
 
   list)
-    echo "🔗 Available Targets:"
     cd build/hosted
     ls -ld */ | awk '{sub(/\/$/, "", $9); print $9 " -> Created on " $6 " " $7 " " $8}'
     ;;
