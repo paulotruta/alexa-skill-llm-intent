@@ -137,7 +137,6 @@ case $COMMAND in
     HOSTED_BUILD_DIRNAME=${2}
     DIALOG_LOCALE=${3:-en-US}
     cd build/hosted/$HOSTED_BUILD_DIRNAME
-    pwd
     ask dialog --locale $DIALOG_LOCALE
     ;;
 
