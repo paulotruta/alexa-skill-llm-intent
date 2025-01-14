@@ -25,6 +25,7 @@ You should setup your configuration file by copying `config.example.json` to `co
 - **`llm_url` ->** OpenAI API Schema Compatible provider api url, for example: `https://openrouter.ai/api/v1/chat/completions`
 - **`llm_key`->** Provider API key.
 - **`llm_model` ->** Model name/version to use with the provider API, for example: `google/gemini-2.0-flash-exp:free`. Set to 'webhook' to proxy request as POST to `llm_api_url`, and sending `llm_key` as the `token` key of the json body.
+- **`invocation_name` ->** The anem you want to call your skill by. For example, if you add "gemini flash", you should call the skill like: "Alexa, ask gemini flash a question". (*Note: This configuration variable is only taken into account to set the skill invocation name when deploying your skill using the Makefile command. If you're deploying manually or via AWS, you still need to manually edit your `interactionsModel` file. Please look for further instructions below.*)
 
 ## Creating an Alexa Skill
 
