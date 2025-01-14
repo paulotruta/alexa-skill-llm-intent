@@ -146,7 +146,6 @@ case $COMMAND in
     HOSTED_BUILD_DIRNAME=${2}
     echo $HOSTED_BUILD_DIRNAME
     cd build/hosted/$HOSTED_BUILD_DIRNAME
-    pwd
     ask run
     ;;
 
