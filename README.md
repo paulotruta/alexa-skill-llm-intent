@@ -1,4 +1,10 @@
+<p>
+	<img width="256" src="./skill-package/assets/images/en-US_largeIcon.png"/>
+</p>
+
 # alexa-skill-llm-intent
+
+[![ci](https://github.com/paulotruta/alexa-skill-llm-intent/actions/workflows/ci.yml/badge.svg)](https://github.com/paulotruta/alexa-skill-llm-intent/actions/workflows/ci.yml)
 
 An Alexa Skill template that gives you a ready to use skill to start a turn conversation with an AI. Ask a question and get answered with Alexa's soothing voice, powered by ChatGPT or other llm.
 
