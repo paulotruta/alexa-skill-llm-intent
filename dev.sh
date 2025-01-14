@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # A script to aid in the development of the project while integrating with Alexa Hosted Skills
 # Usage: ./dev.sh <command>
 
