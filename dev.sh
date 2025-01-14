@@ -25,7 +25,7 @@ update_hosted_skill_repo(){
     rsync -av --delete ../../../skill-package/assets ./skill-package
 }
 
-resync_hosted_skill_repo(){
+resync_hosted_skill_repo_environments(){
     git checkout dev
     git pull --rebase
     git merge master
@@ -109,7 +109,7 @@ case $COMMAND in
     git add .
     git commit -a -m "Trigger update from alexa-skill-llm-intent" --no-verify && git push
 
-    resync_hosted_skill_repo
+    resync_hosted_skill_repo_environments
     echo "🔗 Finished updating $HOSTED_BUILD_DIR. "
     ;;
 
