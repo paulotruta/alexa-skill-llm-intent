@@ -10,6 +10,13 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+# Cheeck if the ask-cli is installed
+if ! command -v ask &> /dev/null
+then
+    echo "❌ ask-cli could not be found. Please install ask-cli before running this script"
+    exit
+fi
+
 update_hosted_skill_repo(){
     rsync -av --delete ../../../lambda ./
     rsync -av --delete ../../../skill-package/interactionModels ./skill-package
