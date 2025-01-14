@@ -33,9 +33,13 @@ resync_hosted_skill_repo(){
 }
 
 # Check if the command is valid, commands can be:
-# - init: Initialize the project with an existing skill id
-# - update: Update the skill hosted repo with the code from the local repo
-# - deploy: Update the model and Deploy the code from the skill hosted repo
+# -> new: Create a new blank target skill project as an Alexa hosted skill (requires configured ask-cli)
+# -> init <skill_id>: Initialize a target skill project with an existing skill id (Must be a custom alexa hosted skill)
+# -> list: List all the available target skill projects
+# -> update <skill_slug>: Update the skill hosted repo with the code from the local repo (deploy)
+# -> config <config_file_path>: Configure the target skill to be deployed using a copy of the provided config file
+# -> dialog <skill_slug> <locale>: Debug the dialog model for the target skill
+# -> debug <skill_slug>: Debug the code for the skill hosted repo
 
 COMMAND=$1
 
