@@ -88,6 +88,8 @@ geminiflash             perplexitysearch        testapplication
 
 A new "hello world" Alexa Hosted Skill target will show up in your Alexa Developer account, and is now ready to be updated with the template code.
 
+>*⚠️ Due to instabilities on Amazon's infrastrucure side, sometimes this process can hang while the skill is being created. This can result in you seeing the skill in the developer console but not on your machine. Give it an hour, delete the skill and creating a new one again.*
+
 
 #### Importing an existing Alexa Skill
 
