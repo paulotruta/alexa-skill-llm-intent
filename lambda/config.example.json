@@ -1,5 +1,6 @@
 {
-    "llm_url": "",
-    "llm_key": "",
-    "llm_model": ""
+    "llm_url": "https://openrouter.ai/api/v1/chat/completions",
+    "llm_model": "google/gemini-2.0-flash-exp:free",
+    "llm_key": "<YOUR_OPEAI_ANTHROPIC_OPENROUTER_API_KEY>",
+    "invocation_name": "gemini flash"
 }
