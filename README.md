@@ -173,7 +173,7 @@ make config skill=<skill_slug> file=<config_file_path>
 
 This will make a copy of this file into `/build/hosted/<skill_slug>_config.json`, which will be used by the skill when it is updated. The invocation words for the skill are set at update time using the `invokation_name` value in the `config.json` file.
 
->*⚠️ The config giles in `/build/hosted/<skill_slug>_config.json` can also be changed manually before running `make update`.*
+>*⚠️ The config files in `/build/hosted/<skill_slug>_config.json` can also be changed manually before running `make update`.*
 
 #### Updating the Skill
 
