@@ -105,7 +105,7 @@ geminiflash             perplexitysearch        testapplication
 ✅ Hosted skill created. To push repo code, run 'make update'
 ```
 
-A new "hello world" Alexa Hosted Skill target will show up in your Alexa Developer account, and is now ready to be updated with the template code.
+A new Alexa Hosted Skill target will show up in your Alexa Developer account with the provided name, but its code and configuration is from a blank "hello world" project. But it is now ready to be updated with the template code (check the `make update` command below).
 
 >*⚠️ Due to instabilities on Amazon's infrastrucure side, sometimes this process can hang while the skill is being created. This can result in you seeing the skill in the developer console but not on your machine. Give it an hour, delete the skill and creating a new one again.*
 
@@ -120,6 +120,8 @@ make init id=<skill_id>
 
 This will import your skill as a Alexa Hosted Skill target, which you can then use to update the skill to use this template.
 
+>*⚠️ Be aware that if your imported Alexa-Hosted skill contains any custom code or configurations, they will be fully overriten once you run the `make update` command after importing your skill as a target.*
+
 #### List existing Alexa Hosted Skill targets
 
 You can list all the existing Alexa Hosted Skill targets being managed by this project by running:
@@ -131,7 +133,6 @@ make list
 This will return a list of `<skill_slug>` and the date they were created or imported, for example:
 
 ```
-🔗 Available Targets:
 perplexitysearch -> Created on Jan 13 02:12
 testapplication -> Created on Jan 13 02:45
 ```
@@ -147,6 +148,8 @@ make config skill=<skill_slug> file=<config_file_path>
 ```
 
 This will make a copy of this file into `/build/hosted/<skill_slug>_config.json`, which will be used by the skill when it is updated. The invocation words for the skill are set at update time using the `invokation_name` value in the `config.json` file.
+
+>*⚠️ The config giles in `/build/hosted/<skill_slug>_config.json` can also be changed manually before running `make update`.*
 
 #### Updating the Skill
 
@@ -180,15 +183,19 @@ You can debug the lambda function (using `ask run`) for a skill target project b
 make debug skill=<skill_slug>
 ```
 
+>*❌ This command is not fully tested and might not work properly at the moment. Contributions are welcome 😉*
+
+>*⚠️ Because of Alexa hosted skills limitations, debugging using `make debug skill=<skill_slug>` (or the `ask run` CLI command) is currently only available to customers in the NA region. You will only be able to use the debugger this way if your skill is hosted in one of the US regions.*
+
 ### Manual - Using the Alexa Developer Console
 
 >*ℹ️ This method is recommended for beginners, as it requires less configuration and manual steps. Follow this method if you are not familiar with the ASK CLI and want to use the Alexa Developer Console directly.*
 
-1. Make sure you the `config.json` file and `invokation_name` value in `skill-package/interactionModels/custom/en-US.json` is setup correctly.
+1. Make sure you the `config.json` file and `invocation_name` value in `skill-package/interactionModels/custom/en-US.json` is setup correctly.
 2. Build the upload package by running `make package` (to later import it in the Alexa Developer Console).
 3. Create a new Alexa Skill in the Alexa Developer Console.
 4. Go in the Code tab of the Alexa Developer Console and click "Import Code".
-5. Select the zip file with the contents of this repository.
+5. Select the zip file located in the `./build/package/` directory.
 6. Click "Save" and "Build Model". The skill should be ready to use.
 
 For more information, check the documentation here: [Importing a Skill into the Alexa Developer Console](https://developer.amazon.com/en-US/docs/alexa/hosted-skills/alexa-hosted-skills-create.html#create-console).
@@ -221,9 +228,12 @@ Once the skill is created, you can test it in the [Alexa Developer Console](http
 
 ### Commands
 
-- `Alexa, I want to ask <invokation_name> a question`
-- `Alexa, ask <invokation_name> about our solar system`
-- `Alexa, ask <invokation_name> to explain the NP theorem`
+Once your skill is deployed, you can interact with it using the following commands (from the Test tab in the Alexa Developer Console or your account connected Alexa devices):
+
+- `Alexa, I want to ask <invocation_name> a question`
+- `Alexa, ask <invocation_name> about our solar system`
+- `Alexa, ask <invocation_name> to explain the NP theorem`
+- `Alexa, open <invocation_name>`
 
 ## Development
 
