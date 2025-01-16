@@ -16,6 +16,7 @@ clean:
 	rm -rf $(BUILD_PACKAGE_DIR)
 
 dev: clean
+	cd lambda
 	python -m venv .venv
 	. .venv/bin/activate
 	pip install -r lambda/requirements-dev.txt

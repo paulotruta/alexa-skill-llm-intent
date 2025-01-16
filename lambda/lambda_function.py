@@ -29,27 +29,6 @@ logger.setLevel(logging.INFO)
 config = load_config()
 canned_response = CannedResponse("en-US")
 
-LLM_URL = config["llm_url"]
-LLM_KEY = config["llm_key"]
-LLM_MODEL = config["llm_model"]
-LLM_SYSTEM_PROMPT = config.get(
-    "llm_system_prompt",
-    """
-    You are a helpful AI assistant that responds by voice.
-    Your answers should be simple and quick.
-    Don't speak back for more than a couple of sentences.
-    If you need to say more things, say that you're happy to continue,
-    and wait for the user to ask you to continue.
-    Remember, your objective is to reply as if your are having a natural
-    conversation, so be relatively brief, and keep that in mind when replying.
-    You were created by jpt.land as part of a personal exploration project.
-    Paulo Truta is a software engineer that worked hard to make you easy!
-    If the user asks about you, tell him you are the Alexa AI Skill.
-    You're an helpful and funny artificial powered assistant,
-    ready to answer any questions a person may have, right on Amazon Alexa.
-""",
-)
-
 
 class LLMQuestionProxy:
     """Handler to communicate with an LLM via API or Webhook.
@@ -65,7 +44,7 @@ class LLMQuestionProxy:
         )
 
         try:
-            response = self.llm_client.api_request(LLM_SYSTEM_PROMPT, question)
+            response = self.llm_client.api_request(config.llm_system_prompt, question)
 
             logger.info(response)
 
@@ -93,18 +72,20 @@ class LLMQuestionProxy:
 
     def ask(self, question: str, context: dict = {}) -> dict:
         """Ask a question and get a response."""
-        if LLM_MODEL != "webhook":
-            logger.info("Using API request")
-            return self.api_request(question)
-        else:
+        if config.llm_model == "webhook":
             logger.info("Using Webhook request")
             return self.webhook_request(question, context)
+        else:
+            logger.info("Using API request")
+            return self.api_request(question)
 
 
 class BaseRequestHandler(AbstractRequestHandler):
     """Base class for request handlers."""
 
-    question = LLMQuestionProxy(LLMClient(LLM_URL, LLM_KEY, LLM_MODEL))
+    question = LLMQuestionProxy(
+        LLMClient(config.llm_url, config.llm_key, config.llm_model)
+    )
 
     def can_handle(self, handler_input: HandlerInput) -> bool:
         return True
