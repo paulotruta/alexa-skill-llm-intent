@@ -22,10 +22,22 @@ An Alexa Skill template that gives you a ready to use skill to start a turn conv
 ### Setting up Environment variables
 
 You should setup your configuration file by copying `config.example.json` to `config.json` and filling the required fields:
-- **`llm_url` ->** OpenAI API Schema Compatible provider api url, for example: `https://openrouter.ai/api/v1/chat/completions`
-- **`llm_key`->** Provider API key.
-- **`llm_model` ->** Model name/version to use with the provider API, for example: `google/gemini-2.0-flash-exp:free`. Set to 'webhook' to proxy request as POST to `llm_api_url`, and sending `llm_key` as the `token` key of the json body.
-- **`invocation_name` ->** The anem you want to call your skill by. For example, if you add "gemini flash", you should call the skill like: "Alexa, ask gemini flash a question". (*Note: This configuration variable is only taken into account to set the skill invocation name when deploying your skill using the Makefile command. If you're deploying manually or via AWS, you still need to manually edit your `interactionsModel` file. Please look for further instructions below.*)
+
+- **`invocation_name`** -> The invocation name for the skill
+  - *example: `gemini flash`*
+- **`llm_url` ->** OpenAI OpenAPI Schema Compatible LLM API provider url
+  - *example: `https://openrouter.ai/api/v1/chat/completions`*
+- **`llm_model` ->** Model name/version to use with the provider API
+  - *example: `google/gemini-2.0-flash-exp:free`*
+- **`llm_key`->** Provider API key
+  - *example: `sk-or-v1-<Secret_Code>`*
+
+
+
+>*ℹ️ Set `llm_model` to `webhook` to proxy the alexa request as a POST call to `llm_api_url`, sending `llm_key` as the `token` key of the json body, together with useful alexa request context.*
+
+>*⚠️ Note that the invocation name configuration value is only automatically set on deployment using the `(Automated) Makefile` method, and only for the `en-US` locale. If you are using the `(Manual) Alexa Developer Console` method, or trying to support multiple locales, you should instead set the `invocationName` value manually in the `skill-package/interactionModels/custom/<locale>.json` files.*
+
 
 ## Creating an Alexa Skill
 
