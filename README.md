@@ -37,7 +37,6 @@ An Alexa Skill template that gives you a ready to use skill to start a turn conv
 
 ### Requirements
 
-
 - [Alexa Developer Account](https://developer.amazon.com/alexa)
 - [ASK CLI](https://developer.amazon.com/en-US/docs/alexa/smapi/quick-start-alexa-skills-kit-command-line-interface.html)
 - [OpenAI API schema](https://github.com/openai/openai-openapi) compatible llm provider API url, key, and model name: [Open AI](https://platform.openai.com) / [Anthropic](https://www.anthropic.com/) / [OpenRouter](https://openrouter.ai/)
