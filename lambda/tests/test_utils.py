@@ -1,17 +1,62 @@
+import json
 from unittest import TestCase
 from unittest.mock import mock_open, patch
 
-from llm_intent.utils import CONFIG_FILE, CannedResponse, load_config
+from llm_intent.utils import CONFIG_FILE, DEFAULT_PROMPT, CannedResponse, load_config
+from pydantic import ValidationError
 
 
 class TestLoadConfig(TestCase):
-    @patch("builtins.open", new_callable=mock_open, read_data='{"key": "value"}')
+    MINIMUM_CONFIG = {
+        "llm_url": "http://example.org",
+        "llm_key": "llm_key",
+        "llm_model": "llm_model",
+    }
+
+    COMPLETE_CONFIG = {
+        "llm_url": "http://example.org",
+        "llm_key": "llm_key",
+        "llm_model": "llm_model",
+        "llm_system_prompt": "llm_prompt",
+    }
+
+    @patch(
+        "builtins.open", new_callable=mock_open, read_data=json.dumps(COMPLETE_CONFIG)
+    )
     @patch("llm_intent.utils.exists", return_value=True)
     def test_load_config_success(self, mock_exists, mock_open_file):
         """Test loading configuration successfully."""
-        expected_config = {"key": "value"}
         config = load_config()
-        self.assertEqual(config, expected_config)
+        self.assertEqual(config.llm_url, TestLoadConfig.COMPLETE_CONFIG["llm_url"])
+        self.assertEqual(config.llm_key, TestLoadConfig.COMPLETE_CONFIG["llm_key"])
+        self.assertEqual(config.llm_model, TestLoadConfig.COMPLETE_CONFIG["llm_model"])
+        self.assertEqual(
+            config.llm_system_prompt,
+            TestLoadConfig.COMPLETE_CONFIG["llm_system_prompt"],
+        )
+        mock_exists.assert_called_once_with(CONFIG_FILE)
+        mock_open_file.assert_called_once_with(CONFIG_FILE)
+
+    @patch(
+        "builtins.open", new_callable=mock_open, read_data=json.dumps(MINIMUM_CONFIG)
+    )
+    @patch("llm_intent.utils.exists", return_value=True)
+    def test_load_config_default_prompt(self, mock_exists, mock_open_file):
+        """Test loading configuration with default successfully."""
+        config = load_config()
+        self.assertEqual(config.llm_url, TestLoadConfig.COMPLETE_CONFIG["llm_url"])
+        self.assertEqual(config.llm_key, TestLoadConfig.COMPLETE_CONFIG["llm_key"])
+        self.assertEqual(config.llm_model, TestLoadConfig.COMPLETE_CONFIG["llm_model"])
+        self.assertEqual(config.llm_system_prompt, DEFAULT_PROMPT)
+        mock_exists.assert_called_once_with(CONFIG_FILE)
+        mock_open_file.assert_called_once_with(CONFIG_FILE)
+
+    @patch("builtins.open", new_callable=mock_open, read_data=json.dumps({}))
+    @patch("llm_intent.utils.exists", return_value=True)
+    def test_load_config_missing_fields(self, mock_exists, mock_open_file):
+        """Test loading configuration missing fields."""
+        with self.assertRaises(ValidationError):
+            load_config()
         mock_exists.assert_called_once_with(CONFIG_FILE)
         mock_open_file.assert_called_once_with(CONFIG_FILE)
 

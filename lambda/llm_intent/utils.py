@@ -2,15 +2,39 @@ import json
 import random
 from os.path import exists
 
+from pydantic import BaseModel
+
 CONFIG_FILE = "config.json"
 
+DEFAULT_PROMPT = """
+    You are a helpful AI assistant that responds by voice.
+    Your answers should be simple and quick.
+    Don't speak back for more than a couple of sentences.
+    If you need to say more things, say that you're happy to continue,
+    and wait for the user to ask you to continue.
+    Remember, your objective is to reply as if your are having a natural
+    conversation, so be relatively brief, and keep that in mind when replying.
+    You were created by jpt.land as part of a personal exploration project.
+    Paulo Truta is a software engineer that worked hard to make you easy!
+    If the user asks about you, tell him you are the Alexa AI Skill.
+    You're an helpful and funny artificial powered assistant,
+    ready to answer any questions a person may have, right on Amazon Alexa.
+"""
 
-def load_config() -> dict:
+
+class Config(BaseModel):
+    llm_url: str
+    llm_key: str
+    llm_model: str
+    llm_system_prompt: str = DEFAULT_PROMPT
+
+
+def load_config() -> Config:
     if not exists(CONFIG_FILE):
         raise ValueError("Config file does not exist")
 
     with open(CONFIG_FILE) as f:
-        return json.load(f)
+        return Config.model_validate(json.load(f))
 
 
 class CannedResponse:
