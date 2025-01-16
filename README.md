@@ -62,6 +62,7 @@ You should setup your configuration file by copying `config.example.json` to `co
 
 >*⚠️ Note that the invocation name configuration value is only automatically set on deployment using the `(Automated) Makefile` method, and only for the `en-US` locale. If you are using the `(Manual) Alexa Developer Console` method, or trying to support multiple locales, you should instead set the `invocationName` value manually in the `skill-package/interactionModels/custom/<locale>.json` files.*
 
+>*ℹ️ If you don't provide a `llm_system_prompt`, the skill will use a default system prompt, which you can see in `./lambda/lambda_function.py:37` *
 
 ## Creating an Alexa Skill
 
