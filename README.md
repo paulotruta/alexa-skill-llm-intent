@@ -8,6 +8,31 @@
 
 An Alexa Skill template that gives you a ready to use skill to start a turn conversation with an AI. Ask a question and get answered with Alexa's soothing voice, powered by ChatGPT or other llm.
 
+- [alexa-skill-llm-intent](#alexa-skill-llm-intent)
+  - [Configuration](#configuration)
+    - [Requirements](#requirements)
+    - [Setting up Environment variables](#setting-up-environment-variables)
+  - [Creating an Alexa Skill](#creating-an-alexa-skill)
+    - [Automated - Using the Makefile (Alexa Hosted Skills Management)](#automated---using-the-makefile-alexa-hosted-skills-management)
+      - [Create a new Alexa Skill](#create-a-new-alexa-skill)
+      - [Importing an existing Alexa Skill](#importing-an-existing-alexa-skill)
+      - [List existing Alexa Hosted Skill targets](#list-existing-alexa-hosted-skill-targets)
+      - [Setting the Skill configuration file and invocation words](#setting-the-skill-configuration-file-and-invocation-words)
+      - [Updating the Skill](#updating-the-skill)
+      - [Debugging Dialog Model](#debugging-dialog-model)
+      - [Debugging Lambda Function](#debugging-lambda-function)
+    - [Manual - Using the Alexa Developer Console](#manual---using-the-alexa-developer-console)
+    - [Advanced - Using the Ask CLI](#advanced---using-the-ask-cli)
+  - [Usage](#usage)
+    - [Commands](#commands)
+  - [Development](#development)
+    - [Local Development](#local-development)
+    - [Skill Package](#skill-package)
+    - [Skill Lambda Function](#skill-lambda-function)
+- [Contributing](#contributing)
+- [Disclaimer](#disclaimer)
+
+
 ## Configuration
 
 ### Requirements
@@ -262,6 +287,10 @@ The skill code is a python lambda function and is located in the `lambda/` folde
 >*ℹ️ When using the `(Automated) Makefile` method to manage Alexa Hosted Skill targets, you can debug the lambda function by using the `make debug skill=<skill_slug>` command, which enables you to test your skill code locally against your skill invocations by routing requests to your developer machine. This enables you to verify changes quickly to skill code as you can test without needing to deploy skill code to Lambda.*
 
 >*⚠️ Because of Alexa hosted skills limitations, debugging using `make debug skill=<skill_slug>` (or the `ask run` CLI command) is currently only available to customers in the NA region. You will only be able to use the debugger this way if your skill is hosted in one of the US regions.*
+
+# Contributing
+
+Feel free to contribute to this project by opening issues or pull requests. I'm open to suggestions to improve the code, especially to fix any bugs. A good place to start is checking if there are any issues with the label `good first issue` or `help wanted`.
 
 # Disclaimer
 
